@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "878473406747",
+    "project_id": "musemyth-55f5f",
+    "storage_bucket": "musemyth-55f5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878473406747:android:3b6a6ee872cbd95a7b0bbe",
+        "android_client_info": {
+          "package_name": "br.com.musemyth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878473406747-ubl2hbfitrc0jinj3dik24naaod1hu60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADO50nGXzW3NpuDtbdc9SWFG4pQFHzPxM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878473406747-ubl2hbfitrc0jinj3dik24naaod1hu60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:878473406747:android:307bdf63de0a96fa7b0bbe",
+        "android_client_info": {
+          "package_name": "com.musemyth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "878473406747-ubl2hbfitrc0jinj3dik24naaod1hu60.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADO50nGXzW3NpuDtbdc9SWFG4pQFHzPxM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "878473406747-ubl2hbfitrc0jinj3dik24naaod1hu60.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
