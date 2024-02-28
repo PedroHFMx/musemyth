@@ -2,7 +2,7 @@ package com.musemyth.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Email
@@ -91,150 +93,148 @@ fun LoginScreen(navController: NavController? = null) {
         HandleFirebaseError(fbError)
     }
 
-    Box(
+    Column(
         Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState(0))
             .blur(if (showModal) 20.dp else 0.dp)
             .background(bgColor)
-            .padding(24.dp), Alignment.Center
+            .padding(24.dp), Arrangement.Center
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "logo",
-                colorFilter = ColorFilter.tint(primary),
-                modifier = Modifier
-                    .width(200.dp)
-                    .align(Alignment.CenterHorizontally)
-            )
-            Spacer(modifier = Modifier.padding(10.dp))
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                enabled = !isLoading,
-                shape = ShapeDefaults.ExtraLarge,
-                value = email,
-                onValueChange = { handleErrors(it.trim(), null); email = it },
-                label = { Text(text = "Email") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Email, contentDescription = "email"
-                    )
-                },
-                trailingIcon = {
-                    if (email.isNotEmpty()) {
-                        IconButton(onClick = { email = "" }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = "clear text"
-                            )
-                        }
-
-                    }
-                },
-                singleLine = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedLeadingIconColor = primary,
-                    focusedTrailingIconColor = primary,
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "logo",
+            colorFilter = ColorFilter.tint(primary),
+            modifier = Modifier
+                .width(200.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+        Spacer(modifier = Modifier.padding(10.dp))
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
+            enabled = !isLoading,
+            shape = ShapeDefaults.ExtraLarge,
+            value = email,
+            onValueChange = { handleErrors(it.trim(), null); email = it },
+            label = { Text(text = "Email") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Email, contentDescription = "email"
                 )
-            )
-            if (emailError) Spacer(modifier = Modifier.padding(3.dp))
-            if (emailError) Text(
-                text = "Insira um email válido*", color = errorColor, fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.padding(3.dp))
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                enabled = !isLoading,
-                shape = ShapeDefaults.ExtraLarge,
-                value = password,
-                onValueChange = { handleErrors(null, it); password = it },
-                visualTransformation =
-                if (showPassword) VisualTransformation.None
-                else PasswordVisualTransformation(),
-                label = { Text(text = "Senha") },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Lock, contentDescription = "lock"
-                    )
-                },
-                trailingIcon = {
-                    IconButton(onClick = { showPassword = !showPassword }) {
+            },
+            trailingIcon = {
+                if (email.isNotEmpty()) {
+                    IconButton(onClick = { email = "" }) {
                         Icon(
-                            imageVector =
-                            if (showPassword) Icons.Rounded.VisibilityOff
-                            else Icons.Rounded.Visibility,
-                            contentDescription =
-                            "Password Visibility"
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "clear text"
                         )
                     }
-                },
-                singleLine = true,
-                colors = TextFieldDefaults.textFieldColors(
-                    containerColor = Color.White,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedLeadingIconColor = primary,
-                    focusedTrailingIconColor = primary,
-                )
-            )
-            if (passwordError) Spacer(modifier = Modifier.padding(3.dp))
-            if (passwordError) Text(
-                text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 14.sp
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            TextButton(modifier = Modifier.align(Alignment.End), enabled = !isLoading, onClick = {
-                navController?.navigate("password")
-            }) {
-                Text(
-                    text = "Esqueci minha senha",
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                )
-            }
-            Spacer(modifier = Modifier.padding(4.dp))
-            Button(modifier = if (isLoading) Modifier
-                .width(200.dp)
-                .height(55.dp)
-                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
-                .align(Alignment.CenterHorizontally)
-            else Modifier
-                .fillMaxWidth()
-                .height(55.dp)
-                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                shape = ShapeDefaults.ExtraLarge,
-                enabled = !isLoading,
-                colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
-                onClick = { handleErrors(email, password); handleLogin() }) {
-                if (!isLoading) Text(text = "Entrar", fontSize = 16.sp) else {
-                    CircularProgressIndicator(color = Color.White)
+
                 }
+            },
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                focusedLeadingIconColor = primary,
+                focusedTrailingIconColor = primary,
+            )
+        )
+        if (emailError) Spacer(modifier = Modifier.padding(3.dp))
+        if (emailError) Text(
+            text = "Insira um email válido*", color = errorColor, fontSize = 14.sp
+        )
+        Spacer(modifier = Modifier.padding(3.dp))
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
+            enabled = !isLoading,
+            shape = ShapeDefaults.ExtraLarge,
+            value = password,
+            onValueChange = { handleErrors(null, it); password = it },
+            visualTransformation =
+            if (showPassword) VisualTransformation.None
+            else PasswordVisualTransformation(),
+            label = { Text(text = "Senha") },
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Rounded.Lock, contentDescription = "lock"
+                )
+            },
+            trailingIcon = {
+                IconButton(onClick = { showPassword = !showPassword }) {
+                    Icon(
+                        imageVector =
+                        if (showPassword) Icons.Rounded.VisibilityOff
+                        else Icons.Rounded.Visibility,
+                        contentDescription =
+                        "Password Visibility"
+                    )
+                }
+            },
+            singleLine = true,
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.White,
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                focusedLeadingIconColor = primary,
+                focusedTrailingIconColor = primary,
+            )
+        )
+        if (passwordError) Spacer(modifier = Modifier.padding(3.dp))
+        if (passwordError) Text(
+            text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 14.sp
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        TextButton(modifier = Modifier.align(Alignment.End), enabled = !isLoading, onClick = {
+            navController?.navigate("password")
+        }) {
+            Text(
+                text = "Esqueci minha senha",
+                fontSize = 16.sp,
+                color = Color.Black,
+            )
+        }
+        Spacer(modifier = Modifier.padding(4.dp))
+        Button(modifier = if (isLoading) Modifier
+            .width(200.dp)
+            .height(55.dp)
+            .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+            .align(Alignment.CenterHorizontally)
+        else Modifier
+            .fillMaxWidth()
+            .height(55.dp)
+            .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
+            shape = ShapeDefaults.ExtraLarge,
+            enabled = !isLoading,
+            colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
+            onClick = { handleErrors(email, password); handleLogin() }) {
+            if (!isLoading) Text(text = "Entrar", fontSize = 16.sp) else {
+                CircularProgressIndicator(color = Color.White)
             }
-            Spacer(modifier = Modifier.padding(10.dp))
-            TextButton(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = { navController?.navigate("register") },
-                enabled = !isLoading
-            ) {
-                Text(text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = Color.Black, fontSize = 16.sp)) {
-                        append("Não tem conta? ")
-                    }
-                    withStyle(style = SpanStyle(color = primary, fontSize = 16.sp)) {
-                        append("Cadastrar")
-                    }
-                })
-            }
+        }
+        Spacer(modifier = Modifier.padding(10.dp))
+        TextButton(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = { navController?.navigate("register") },
+            enabled = !isLoading
+        ) {
+            Text(text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = Color.Black, fontSize = 16.sp)) {
+                    append("Não tem conta? ")
+                }
+                withStyle(style = SpanStyle(color = primary, fontSize = 16.sp)) {
+                    append("Cadastrar")
+                }
+            })
+
         }
 
     }
