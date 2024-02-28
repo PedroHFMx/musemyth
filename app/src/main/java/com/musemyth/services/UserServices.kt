@@ -26,9 +26,9 @@ class UserServices {
                 isLoading = false
             }
             .addOnFailureListener { exception ->
+                showModal = true
                 println("Deu erro: " + exception.message)
-                fbError = exception.message!!; showModal = true
-                isLoading = false
+                fbError = exception.message!!
             }
     }
 
@@ -45,15 +45,15 @@ class UserServices {
                         isLoading = false
                     }
                     .addOnFailureListener { exception ->
+                        showModal = true
                         println("Deu erro: " + exception.message)
-                        fbError = exception.message!!; showModal = true
-                        isLoading = false
+                        fbError = exception.message!!
                     }
             }
             .addOnFailureListener { exception ->
+                showModal = true
                 println("Deu erro: " + exception.message)
-                fbError = exception.message!!; showModal = true
-                isLoading = false
+                fbError = exception.message!!
             }
     }
 
@@ -66,9 +66,9 @@ class UserServices {
                 isLoading = false
             }
             .addOnFailureListener{exception ->
+                showModal = true
                 println("Deu erro: " + exception.message)
-                fbError = exception.message!!; showModal = true
-                isLoading = false
+                fbError = exception.message!!
             }
     }
 

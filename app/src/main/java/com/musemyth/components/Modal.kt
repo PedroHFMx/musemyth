@@ -4,11 +4,17 @@ import android.widget.ImageView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Dangerous
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -20,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +45,7 @@ fun ShowModal(
     onDismiss: () -> Unit = {},
     onConfirm: (() -> Unit)? = null,
     confirmBtnTxt: String = "Ok",
-    icon: ImageVector = Icons.Rounded.Warning,
+    icon: ImageVector = Icons.Rounded.Error,
     iconColor: Color = errorColor
 ) {
     Dialog(
@@ -55,12 +62,12 @@ fun ShowModal(
                     .fillMaxWidth()
                     .background(Color.White)
                     .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
                     icon, contentDescription = "warning", tint = iconColor,
-                    modifier = Modifier.width(36.dp)
+                    modifier = Modifier.size(30.dp)
                 )
                 Text(
                     text = title, fontWeight = FontWeight.Light, textAlign = TextAlign.Center,
@@ -68,7 +75,7 @@ fun ShowModal(
                 )
                 Text(
                     text = content, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center,
-                    fontSize = 14.sp
+                    fontSize = 16.sp
                 )
                 Button(
                     onClick = {
@@ -76,6 +83,9 @@ fun ShowModal(
                             onConfirm()
                         }
                     },
+                    Modifier.height(50.dp)
+                        .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+                        .widthIn(min = 100.dp),
                     shape = ShapeDefaults.ExtraLarge,
                     elevation = ButtonDefaults.elevatedButtonElevation(2.dp),
                 ) {

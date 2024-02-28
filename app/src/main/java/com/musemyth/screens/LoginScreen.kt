@@ -99,7 +99,7 @@ fun LoginScreen(navController: NavController? = null) {
             .verticalScroll(rememberScrollState(0))
             .blur(if (showModal) 20.dp else 0.dp)
             .background(bgColor)
-            .padding(24.dp), Arrangement.Center
+            .padding(16.dp), Arrangement.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo),

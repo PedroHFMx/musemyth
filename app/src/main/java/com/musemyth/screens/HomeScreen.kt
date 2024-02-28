@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.List
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
@@ -40,21 +41,9 @@ import com.musemyth.ui.theme.secondary
 
 @Composable
 @Preview
-fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null) {
+fun HomeScreen(navController: NavController? = null) {
 
     val userServices = UserServices()
-
-    fun Modifier.clickableWithoutRipple(
-        interactionSource: MutableInteractionSource, onClick: () -> Unit
-    ) = composed(factory = {
-        this.then(
-            Modifier.clickable(interactionSource = interactionSource,
-                indication = null,
-                onClick = { onClick() })
-        )
-    })
-
-
 
     Column(
         Modifier
@@ -73,7 +62,7 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
         ) {
             Column(
                 Modifier
-                    .weight(1f)
+                    .weight(4f)
                     .fillMaxSize()
             ) {
                 Text(text = "Seus Storylines:")
@@ -86,7 +75,7 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
             Spacer(modifier = Modifier.size(10.dp))
             Column(
                 Modifier
-                    .weight(1f)
+                    .weight(4f)
                     .fillMaxSize()
             ) {
                 Text(text = "Seus Personagens:", fontSize = 16.sp)
@@ -100,19 +89,19 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
             Button(
                 { userServices.signOut(navController!!) },
                 modifier = Modifier
-                    .weight(2f)
+                    .weight(3f)
                     .fillMaxWidth(),
                 shape = ShapeDefaults.ExtraLarge,
                 colors = ButtonDefaults.buttonColors(containerColor = secondary)
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        imageVector = Icons.Rounded.List,
+                        imageVector = Icons.AutoMirrored.Rounded.List,
                         contentDescription = null,
                         tint = Color.White,
                         modifier = Modifier.size(50.dp)
                     )
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(5.dp))
                     Text(
                         text = "Gerar Storyline",
                         textAlign = TextAlign.Center,
@@ -125,7 +114,7 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
             Button(
                 {},
                 modifier = Modifier
-                    .weight(2f)
+                    .weight(3f)
                     .fillMaxWidth(),
                 shape = ShapeDefaults.ExtraLarge,
                 colors = ButtonDefaults.buttonColors(containerColor = primary)
@@ -137,7 +126,7 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
                         tint = Color.White,
                         modifier = Modifier.size(50.dp)
                     )
-                    Spacer(modifier = Modifier.size(10.dp))
+                    Spacer(modifier = Modifier.size(5.dp))
                     Text(
                         "Gerar Personagem", color = Color.White,
                         fontSize = 16.sp,

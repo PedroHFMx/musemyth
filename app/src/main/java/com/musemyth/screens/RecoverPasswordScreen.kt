@@ -66,9 +66,9 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
 
     if (showModal) {
         ShowModal(
-            onDismiss = { showModal = false },
+            onDismiss = { showModal = false; isLoading = false },
             onConfirm = {
-                showModal = false; navController!!.popBackStack()
+                showModal = false; navController!!.popBackStack(); isLoading = false
             },
             icon = Icons.Rounded.CheckCircle,
             iconColor = Color.Green,
