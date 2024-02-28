@@ -23,10 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.musemyth.R
+import com.musemyth.services.isLoading
+import com.musemyth.ui.theme.primary
 
 @Composable
-fun Header(isHome: Boolean = false, title: String? = "", navController: NavController? = null,
-bgColor: Color = Color.Black){
+fun Header(
+    isHome: Boolean = false, title: String? = "", navController: NavController? = null,
+    bgColor: Color = primary
+) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -48,23 +52,30 @@ bgColor: Color = Color.Black){
                         .weight(1f)
                         .fillMaxSize(), Alignment.CenterStart
                 ) {
-                    if(!isHome)
-                     Icon(
-                         imageVector = Icons.Rounded.ArrowBack,
-                         contentDescription = null,
-                         modifier = Modifier
-                             .padding(20.dp, 0.dp)
-                             .clickable { navController?.popBackStack()  },
-                         tint = Color.White
-                     )
+                    if (!isHome)
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBack,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(20.dp, 0.dp)
+                                .clickable {
+                                    if (!isLoading) {
+                                        navController?.popBackStack()
+                                    }
+                                },
+                            tint = Color.White
+                        )
                 }
 
-                if(isHome)
-                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-                    Modifier.padding(8.dp))
+                if (isHome)
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "Logo",
+                        Modifier.padding(8.dp)
+                    )
 
-                if(!isHome)
-                 Text(title!!, color = Color.White, fontSize = 16.sp)
+                if (!isHome)
+                    Text(title!!, color = Color.White, fontSize = 16.sp)
 
                 Row(
                     Modifier

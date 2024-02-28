@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.musemyth.screens.HomeScreen
 import com.musemyth.screens.LoginScreen
+import com.musemyth.screens.RecoverPasswordScreen
 import com.musemyth.screens.RegisterScreen
 import com.musemyth.ui.theme.MusemythTheme
 
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
                     composable("login") { LoginScreen(navController) }
                     composable("register") { RegisterScreen(navController) }
                     composable("home") { HomeScreen(navController) }
+                    composable("password") { RecoverPasswordScreen(navController) }
                 }
             }
 

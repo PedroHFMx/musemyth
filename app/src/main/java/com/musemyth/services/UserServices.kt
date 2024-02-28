@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 var isLoading by mutableStateOf(false)
 var showModal by mutableStateOf(false)
@@ -19,30 +20,62 @@ class UserServices {
         email: String, password: String, navController: NavController
     ) {
         isLoading = true
-        val loginUser = auth.signInWithEmailAndPassword(email, password)
-        loginUser.addOnFailureListener {
-            fbError = loginUser.exception?.message!!; showModal = true; isLoading = false
-        }
-        loginUser.addOnSuccessListener {
-            navController.navigate("home"); isLoading = false
-        }
-
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnSuccessListener {
+                navController.navigate("home")
+                isLoading = false
+            }
+            .addOnFailureListener { exception ->
+                println("Deu erro: " + exception.message)
+                fbError = exception.message!!; showModal = true
+                isLoading = false
+            }
     }
 
-    fun register(email: String, password: String, name: String) {
+    fun register(email: String, password: String, name: String, navController: NavController) {
         isLoading = true
-        val registerUser = auth.createUserWithEmailAndPassword(email, password)
-        if (registerUser.isSuccessful) {
-            isLoading = false
-        } else {
-            isLoading = false
-            val e = registerUser.exception
-        }
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnSuccessListener { result ->
+                FirebaseFirestore.getInstance().collection("users")
+                    .document(result.user!!.uid)
+                    .set(hashMapOf("name" to name, "email" to email, "id" to result.user!!.uid,
+                        "accountType" to "aluno"))
+                    .addOnSuccessListener {
+                        navController.navigate("home")
+                        isLoading = false
+                    }
+                    .addOnFailureListener { exception ->
+                        println("Deu erro: " + exception.message)
+                        fbError = exception.message!!; showModal = true
+                        isLoading = false
+                    }
+            }
+            .addOnFailureListener { exception ->
+                println("Deu erro: " + exception.message)
+                fbError = exception.message!!; showModal = true
+                isLoading = false
+            }
+    }
+
+    fun recoverPassword(email: String, navController: NavController){
+        isLoading = true
+        auth.sendPasswordResetEmail(email)
+            .addOnSuccessListener {
+                navController.popBackStack()
+                showModal = true
+                isLoading = false
+            }
+            .addOnFailureListener{exception ->
+                println("Deu erro: " + exception.message)
+                fbError = exception.message!!; showModal = true
+                isLoading = false
+            }
     }
 
     fun signOut(navController: NavController) {
         isLoading = true
         auth.signOut()
         navController.navigate("login")
+        isLoading = false
     }
 }

@@ -53,6 +53,9 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
                 onClick = { onClick() })
         )
     })
+
+
+
     Column(
         Modifier
             .fillMaxSize()
@@ -86,7 +89,7 @@ fun HomeScreen(navController: NavController? = null, auth: FirebaseAuth? = null)
                     .weight(1f)
                     .fillMaxSize()
             ) {
-                Text(text = "Seus Personagens:")
+                Text(text = "Seus Personagens:", fontSize = 16.sp)
                 if (false) LazyHorizontalGrid(rows = GridCells.Fixed(1), content = {
 
                 }) else Box(Modifier.fillMaxSize(), Alignment.Center) {
