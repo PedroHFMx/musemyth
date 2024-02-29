@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -41,10 +42,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,10 +84,18 @@ fun RegisterScreen(navController: NavController? = null) {
 
     val userServices = UserServices()
 
-    val regexName = Regex("\\b\\w{3,}\\s\\w{3,}\\b")
+    val regexName = Regex("\\b[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\b")
     val regexEmail = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+\$")
 
     val nameParts = name.split(" ")
+
+    // Use FocusRequester to request focus for the second TextField
+    val emailFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val confirmPasswordFocusRequester = remember { FocusRequester() }
+
+    // Use SoftwareKeyboardController to hide the keyboard
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     fun handleErrors(
         emailI: String? = null, passwordI: String? = null, conPasswordI: String? = null,
@@ -146,7 +160,11 @@ fun RegisterScreen(navController: NavController? = null) {
                 shape = ShapeDefaults.Large,
                 value = name,
                 onValueChange = { handleErrors(nameI = it.trim()); if (it.length <= 28) name = it },
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words,
+                    keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = { emailFocusRequester.requestFocus() }
+                ),
                 label = { Text(text = "Nome") },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Person, contentDescription = "") },
                 trailingIcon = {
@@ -175,6 +193,7 @@ fun RegisterScreen(navController: NavController? = null) {
             if (nameError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
                 modifier = Modifier
+                    .focusRequester(emailFocusRequester)
                     .fillMaxWidth()
                     .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
                 shape = ShapeDefaults.Large,
@@ -182,6 +201,11 @@ fun RegisterScreen(navController: NavController? = null) {
                 onValueChange = { handleErrors(emailI = it.trim()); email = it },
                 label = { Text(text = "Email") },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = "") },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
+                    keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = { passwordFocusRequester.requestFocus() }
+                ),
                 trailingIcon = {
                     if (email.isNotEmpty()) {
                         IconButton(onClick = { email = "" }) {
@@ -208,12 +232,18 @@ fun RegisterScreen(navController: NavController? = null) {
             if (emailError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
                 modifier = Modifier
+                    .focusRequester(passwordFocusRequester)
                     .fillMaxWidth()
                     .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
                 shape = ShapeDefaults.Large,
                 value = password,
                 onValueChange = { handleErrors(passwordI = it); password = it },
                 label = { Text(text = "Senha") },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
+                    keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(
+                    onNext = { confirmPasswordFocusRequester.requestFocus() }
+                ),
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Lock, contentDescription = "") },
                 visualTransformation =
                 if (showPassword) VisualTransformation.None
@@ -244,6 +274,7 @@ fun RegisterScreen(navController: NavController? = null) {
             if (passwordError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
                 modifier = Modifier
+                    .focusRequester(confirmPasswordFocusRequester)
                     .fillMaxWidth()
                     .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
                 shape = ShapeDefaults.Large,
@@ -256,6 +287,14 @@ fun RegisterScreen(navController: NavController? = null) {
                 },
                 label = { Text(text = "Confirmar Senha") },
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
+                    keyboardType = KeyboardType.Password),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        handleErrors(email, password, confirmPassword, name)
+                        handleRegisterUser() }
+                ),
                 visualTransformation =
                 if (showPassword) VisualTransformation.None
                 else PasswordVisualTransformation(),

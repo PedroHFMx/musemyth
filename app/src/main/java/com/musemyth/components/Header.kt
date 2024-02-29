@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -27,8 +28,9 @@ import com.musemyth.services.isLoading
 import com.musemyth.ui.theme.primary
 
 @Composable
+@Preview
 fun Header(
-    isHome: Boolean = false, title: String? = "", navController: NavController? = null,
+    isHome: Boolean = false, title: String? = "Teste", navController: NavController? = null,
     bgColor: Color = primary
 ) {
     Box(
@@ -75,7 +77,7 @@ fun Header(
                     )
 
                 if (!isHome)
-                    Text(title!!, color = Color.White, fontSize = 16.sp)
+                    Text(title!!, color = Color.White)
 
                 Row(
                     Modifier

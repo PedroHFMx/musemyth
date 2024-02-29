@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
@@ -24,6 +26,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,11 +41,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
@@ -93,6 +101,9 @@ fun LoginScreen(navController: NavController? = null) {
         HandleFirebaseError(fbError)
     }
 
+    // Use FocusRequester to request focus for the second TextField
+    val focusRequester = remember { FocusRequester() }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -115,10 +126,18 @@ fun LoginScreen(navController: NavController? = null) {
                 .fillMaxWidth()
                 .height(60.dp)
                 .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
+
             enabled = !isLoading,
             shape = ShapeDefaults.ExtraLarge,
             value = email,
             onValueChange = { handleErrors(it.trim(), null); email = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(
+                onNext = {
+                    focusRequester.requestFocus()
+                }
+            ),
             label = { Text(text = "Email") },
             leadingIcon = {
                 Icon(
@@ -152,6 +171,7 @@ fun LoginScreen(navController: NavController? = null) {
         Spacer(modifier = Modifier.padding(3.dp))
         TextField(
             modifier = Modifier
+                .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .height(60.dp)
                 .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
@@ -163,6 +183,13 @@ fun LoginScreen(navController: NavController? = null) {
             if (showPassword) VisualTransformation.None
             else PasswordVisualTransformation(),
             label = { Text(text = "Senha") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    handleErrors(email, password)
+                    handleLogin()
+                }
+            ),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Lock, contentDescription = "lock"
@@ -198,7 +225,6 @@ fun LoginScreen(navController: NavController? = null) {
         }) {
             Text(
                 text = "Esqueci minha senha",
-                fontSize = 16.sp,
                 color = Color.Black,
             )
         }
