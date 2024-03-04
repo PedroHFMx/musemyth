@@ -38,8 +38,6 @@ fun fetchAllData() {
 
 class UserServices {
     private val auth = FirebaseAuth.getInstance()
-    private val user = auth.currentUser
-
 
     fun login(
         email: String, password: String, navController: NavController

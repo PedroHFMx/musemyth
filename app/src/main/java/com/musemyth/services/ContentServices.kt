@@ -32,6 +32,7 @@ fun fetchStorylinesTables() {
                 storylinesList.add(newStoryline)
              }
             }
+
             storylineTables = storylinesList
         }
 }

@@ -24,8 +24,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,11 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
+import com.musemyth.services.fetchStorylinesTables
 import com.musemyth.services.isLoadingStories
 import com.musemyth.services.storylineTables
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarSecondaryColor
+import kotlinx.coroutines.delay
 
 var noGenStoryItems by mutableStateOf(emptyList<String>())
 
@@ -49,6 +54,15 @@ var noGenStoryItems by mutableStateOf(emptyList<String>())
 fun PreGenStoryScreen(navController: NavController? = null) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(statusBarSecondaryColor)
+
+    var telaRenderizada by remember { mutableStateOf(false) }
+
+        // Simula um processo de renderização assíncrona
+        LaunchedEffect(telaRenderizada) {
+            delay(200) // Simula a renderização demorada
+            telaRenderizada = true
+        }
+
 
     var outListS: List<String>
     Column(
@@ -117,7 +131,10 @@ fun PreGenStoryScreen(navController: NavController? = null) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    onClick = { /*TODO*/ },
+                    enabled = telaRenderizada,
+                    onClick = { if (telaRenderizada){
+                        navController!!.navigate("genStory")
+                    } },
                     colors = ButtonDefaults.buttonColors(containerColor = secondary)
                 ) {
                     Text(text = "Gerar Storyline", fontFamily = Poppins)

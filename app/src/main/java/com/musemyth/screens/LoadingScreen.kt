@@ -25,13 +25,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.musemyth.ui.theme.primary
 
 var hasUser: Boolean? by mutableStateOf(null)
-
-
-fun handleAuth() {
-    Handler(Looper.getMainLooper()).postDelayed({
-    }, 1000)
-
-}
 @Composable
 @Preview
 fun LoadingScreen(navController: NavController? = null) {
