@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.musemyth.screens.GenerateCharacterScreen
 import com.musemyth.screens.GenerateStorylineScreen
 import com.musemyth.screens.HomeScreen
 import com.musemyth.screens.LoadingScreen
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
                     composable("userStory") { UserStorylinesScreen(navController) }
                     composable("preGenStory") { PreGenStoryScreen(navController) }
                     composable("preGenChar") { PreGenCharScreen(navController) }
+                    composable("genChar") { GenerateCharacterScreen(navController) }
                     composable("genStory") { GenerateStorylineScreen(navController) }
                 }
             }

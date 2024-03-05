@@ -1,6 +1,8 @@
 package com.musemyth.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.Button
@@ -84,9 +87,10 @@ fun ShowModal(
                             },
                             Modifier
                                 .height(50.dp)
-                                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+                                .shadow(2.dp, shape = RoundedCornerShape(10.dp))
+                                .border(0.1.dp, Color.Black, RoundedCornerShape(10.dp))
                                 .weight(1f),
-                            shape = ShapeDefaults.ExtraLarge,
+                            shape = RoundedCornerShape(10.dp),
                             elevation = ButtonDefaults.elevatedButtonElevation(2.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White,
                                 contentColor = Color.Black),
@@ -102,15 +106,19 @@ fun ShowModal(
                         },
                         if (!twoButtons) Modifier
                             .height(50.dp)
-                            .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+                            .shadow(2.dp, shape = RoundedCornerShape(10.dp))
+                            .border(0.1.dp, Color.Black, RoundedCornerShape(10.dp))
                             .widthIn(min = 100.dp)
                         else Modifier
                             .height(50.dp)
-                            .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+                            .border(0.1.dp, Color.Black, RoundedCornerShape(10.dp))
+                            .shadow(2.dp, shape = RoundedCornerShape(10.dp))
                             .weight(1f),
-                        shape = ShapeDefaults.ExtraLarge,
+                        shape = RoundedCornerShape(10.dp),
                         elevation = ButtonDefaults.elevatedButtonElevation(2.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = if(twoButtons) errorColor else primary)
+                        colors = ButtonDefaults.buttonColors(containerColor =
+                        if(twoButtons) errorColor
+                        else primary)
                     ) {
                         Text(text = confirmBtnTxt, fontSize = 14.sp)
                     }

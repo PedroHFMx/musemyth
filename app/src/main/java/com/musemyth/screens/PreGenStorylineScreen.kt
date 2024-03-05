@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
+import com.musemyth.services.characterTables
 import com.musemyth.services.fetchStorylinesTables
 import com.musemyth.services.isLoadingStories
 import com.musemyth.services.storylineTables
@@ -59,7 +60,7 @@ fun PreGenStoryScreen(navController: NavController? = null) {
 
         // Simula um processo de renderização assíncrona
         LaunchedEffect(telaRenderizada) {
-            delay(200) // Simula a renderização demorada
+            delay(0) // Simula a renderização demorada
             telaRenderizada = true
         }
 
@@ -78,7 +79,21 @@ fun PreGenStoryScreen(navController: NavController? = null) {
             Header(
                 title = "Escolha o que gerar:",
                 bgColor = secondary,
-                navController = navController!!
+                navController = navController!!,
+                actionPress = {
+                    val keysList = arrayListOf<String>()
+                    for (storyTable in storylineTables) {
+                        keysList.add(storyTable.table!!.keys.first())
+                    }
+                    noGenStoryItems = if (noGenStoryItems.isNotEmpty()) {
+                        arrayListOf()
+                    } else {
+                        keysList
+                    }
+                },
+                actionIcon =
+                if (noGenStoryItems.isNotEmpty()) Icons.Rounded.CheckBoxOutlineBlank
+                else Icons.Rounded.CheckBox
             )
             if (isLoadingStories)
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
@@ -133,7 +148,11 @@ fun PreGenStoryScreen(navController: NavController? = null) {
                         .height(50.dp),
                     enabled = telaRenderizada,
                     onClick = { if (telaRenderizada){
-                        navController!!.navigate("genStory")
+                        navController!!.navigate("genStory") {
+                            popUpTo("preGenStory") {
+                                inclusive = true
+                            }
+                        }
                     } },
                     colors = ButtonDefaults.buttonColors(containerColor = secondary)
                 ) {

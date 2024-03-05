@@ -52,7 +52,7 @@ fun GenerateStorylineScreen(navController: NavController? = null) {
 
     // Simula um processo de renderização assíncrona
     LaunchedEffect(telaRenderizada) {
-        delay(200) // Simula a renderização demorada
+        delay(0) // Simula a renderização demorada
         telaRenderizada = true
     }
 
@@ -91,8 +91,6 @@ fun GenerateStorylineScreen(navController: NavController? = null) {
                     val valuesList: List<*> = randomValuesMap.getValue(keysList)
 
                     story = keysList to valuesList.first()!!
-
-                    println("Story: $story")
 
                     Row(
                         Modifier.fillMaxSize(),
@@ -136,7 +134,11 @@ fun GenerateStorylineScreen(navController: NavController? = null) {
     }
         Row (Modifier.padding(16.dp), Arrangement.spacedBy(4.dp)) {
             Button({ if(telaRenderizada){
-                navController!!.popBackStack()
+                navController!!.navigate("preGenStory"){
+                    popUpTo("genStory"){
+                        inclusive = true
+                    }
+                }
             } },
                 Modifier
                     .weight(6f)

@@ -35,15 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
+import com.musemyth.model.Character
 import com.musemyth.services.characterTables
 import com.musemyth.services.isLoadingCharacters
-import com.musemyth.services.isLoadingStories
-import com.musemyth.services.storylineTables
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
-import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarColor
-import com.musemyth.ui.theme.statusBarSecondaryColor
 
 var noGenCharItems by mutableStateOf(emptyList<String>())
 
@@ -55,6 +52,7 @@ fun PreGenCharScreen(navController: NavController? = null) {
     systemUiController.setSystemBarsColor(statusBarColor)
 
     var outListS: List<String>
+
     Column(
         Modifier
             .fillMaxSize()
@@ -68,7 +66,21 @@ fun PreGenCharScreen(navController: NavController? = null) {
             Header(
                 title = "Escolha o que gerar:",
                 bgColor = primary,
-                navController = navController!!
+                navController = navController!!,
+                actionPress = {
+                    val keysList = arrayListOf<String>()
+                    for (charTable in characterTables) {
+                        keysList.add(charTable.table!!.keys.first())
+                    }
+                    noGenCharItems = if (noGenCharItems.isNotEmpty()) {
+                        arrayListOf()
+                    } else {
+                        keysList
+                    }
+                },
+                actionIcon =
+                if (noGenCharItems.isNotEmpty()) Icons.Rounded.CheckBoxOutlineBlank
+                else Icons.Rounded.CheckBox
             )
             if (isLoadingCharacters)
                 Box(Modifier.fillMaxSize(), Alignment.Center) {
@@ -121,7 +133,13 @@ fun PreGenCharScreen(navController: NavController? = null) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController!!.navigate("genChar") {
+                            popUpTo("preGenChar") {
+                                inclusive = true
+                            }
+                        }
+                    },
                     colors = ButtonDefaults.buttonColors(containerColor = primary)
                 ) {
                     Text(text = "Gerar Personagem", fontFamily = Poppins)

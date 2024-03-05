@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -156,8 +157,8 @@ fun RegisterScreen(navController: NavController? = null) {
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                shape = ShapeDefaults.Large,
+                    .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
+                shape = RoundedCornerShape(10.dp),
                 value = name,
                 onValueChange = { handleErrors(nameI = it.trim()); if (it.length <= 28) name = it },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words,
@@ -195,8 +196,8 @@ fun RegisterScreen(navController: NavController? = null) {
                 modifier = Modifier
                     .focusRequester(emailFocusRequester)
                     .fillMaxWidth()
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                shape = ShapeDefaults.Large,
+                    .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
+                shape = RoundedCornerShape(10.dp),
                 value = email,
                 onValueChange = { handleErrors(emailI = it.trim()); email = it },
                 label = { Text(text = "Email") },
@@ -234,8 +235,8 @@ fun RegisterScreen(navController: NavController? = null) {
                 modifier = Modifier
                     .focusRequester(passwordFocusRequester)
                     .fillMaxWidth()
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                shape = ShapeDefaults.Large,
+                    .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
+                shape = RoundedCornerShape(10.dp),
                 value = password,
                 onValueChange = { handleErrors(passwordI = it); password = it },
                 label = { Text(text = "Senha") },
@@ -252,8 +253,8 @@ fun RegisterScreen(navController: NavController? = null) {
                     IconButton(onClick = { showPassword = !showPassword }) {
                         Icon(
                             imageVector =
-                            if (showPassword) Icons.Rounded.VisibilityOff
-                            else Icons.Rounded.Visibility,
+                            if (showPassword) Icons.Rounded.Visibility
+                            else Icons.Rounded.VisibilityOff,
                             contentDescription =
                             "Password Visibility"
                         )
@@ -276,8 +277,8 @@ fun RegisterScreen(navController: NavController? = null) {
                 modifier = Modifier
                     .focusRequester(confirmPasswordFocusRequester)
                     .fillMaxWidth()
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-                shape = ShapeDefaults.Large,
+                    .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
+                shape = RoundedCornerShape(10.dp),
                 value = confirmPassword,
                 onValueChange = {
                     handleErrors(
@@ -302,8 +303,8 @@ fun RegisterScreen(navController: NavController? = null) {
                     IconButton(onClick = { showPassword = !showPassword }) {
                         Icon(
                             imageVector =
-                            if (showPassword) Icons.Rounded.VisibilityOff
-                            else Icons.Rounded.Visibility,
+                            if (showPassword) Icons.Rounded.Visibility
+                            else Icons.Rounded.VisibilityOff,
                             contentDescription =
                             "Password Visibility"
                         )
@@ -326,14 +327,15 @@ fun RegisterScreen(navController: NavController? = null) {
                 modifier = if (isLoading) Modifier
                     .width(200.dp)
                     .height(55.dp)
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+                    .shadow(2.dp, shape = RoundedCornerShape(10.dp))
                     .align(Alignment.CenterHorizontally)
                 else Modifier
                     .fillMaxWidth()
                     .height(55.dp)
-                    .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
+                    .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
                 enabled = !isLoading,
+                shape = RoundedCornerShape(10.dp),
                 onClick = {
                     handleErrors(
                         email,

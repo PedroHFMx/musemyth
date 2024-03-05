@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -125,10 +126,9 @@ fun LoginScreen(navController: NavController? = null) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp)
-                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-
+                .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
-            shape = ShapeDefaults.ExtraLarge,
+            shape = RoundedCornerShape(10.dp),
             value = email,
             onValueChange = { handleErrors(it.trim(), null); email = it },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email,
@@ -174,9 +174,9 @@ fun LoginScreen(navController: NavController? = null) {
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
                 .height(60.dp)
-                .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
+                .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
-            shape = ShapeDefaults.ExtraLarge,
+            shape = RoundedCornerShape(10.dp),
             value = password,
             onValueChange = { handleErrors(null, it); password = it },
             visualTransformation =
@@ -199,8 +199,8 @@ fun LoginScreen(navController: NavController? = null) {
                 IconButton(onClick = { showPassword = !showPassword }) {
                     Icon(
                         imageVector =
-                        if (showPassword) Icons.Rounded.VisibilityOff
-                        else Icons.Rounded.Visibility,
+                        if (showPassword) Icons.Rounded.Visibility
+                        else Icons.Rounded.VisibilityOff,
                         contentDescription =
                         "Password Visibility"
                     )
@@ -226,19 +226,20 @@ fun LoginScreen(navController: NavController? = null) {
             Text(
                 text = "Esqueci minha senha",
                 color = Color.Black,
+                fontSize = 16.sp
             )
         }
         Spacer(modifier = Modifier.padding(4.dp))
         Button(modifier = if (isLoading) Modifier
             .width(200.dp)
             .height(55.dp)
-            .shadow(2.dp, shape = ShapeDefaults.ExtraLarge)
+            .shadow(2.dp, shape = RoundedCornerShape(10.dp))
             .align(Alignment.CenterHorizontally)
         else Modifier
             .fillMaxWidth()
             .height(55.dp)
-            .shadow(2.dp, shape = ShapeDefaults.ExtraLarge),
-            shape = ShapeDefaults.ExtraLarge,
+            .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
+            shape = RoundedCornerShape(10.dp),
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
             onClick = { handleErrors(email, password); handleLogin() }) {
