@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
@@ -35,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
-import com.musemyth.model.Character
 import com.musemyth.services.characterTables
 import com.musemyth.services.isLoadingCharacters
 import com.musemyth.ui.theme.Poppins
@@ -132,7 +132,8 @@ fun PreGenCharScreen(navController: NavController? = null) {
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
+                        .height(55.dp),
+                    shape = RoundedCornerShape(10.dp),
                     onClick = {
                         navController!!.navigate("genChar") {
                             popUpTo("preGenChar") {

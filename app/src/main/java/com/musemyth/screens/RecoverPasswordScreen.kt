@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ import com.musemyth.components.ShowModal
 import com.musemyth.services.UserServices
 import com.musemyth.services.isLoading
 import com.musemyth.services.showModal
+import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.bgColor
 import com.musemyth.ui.theme.errorColor
 import com.musemyth.ui.theme.primary
@@ -108,7 +110,11 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
                 shape = RoundedCornerShape(10.dp),
                 value = email,
                 onValueChange = { handleErrors(it.trim()); email = it },
-                label = { Text(text = "Email") },
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = Poppins
+                ),
+                label = { Text(text = "Email", fontSize = 14.sp) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Email, contentDescription = "email"
@@ -156,7 +162,7 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
                     userServices.recoverPassword(email.trim(), navController!!)
                 }
                 }) {
-                if (!isLoading) Text(text = "Enviar Recuperação", fontSize = 16.sp) else {
+                if (!isLoading) Text(text = "Enviar Recuperação", fontSize = 14.sp) else {
                     CircularProgressIndicator(color = Color.White)
                 }
             }

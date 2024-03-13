@@ -50,6 +50,7 @@ fun Header(
     actionPress: (() -> Unit)? = null,
     actionIcon: ImageVector = Icons.Rounded.CheckBox,
     drawerState: DrawerState? = rememberDrawerState(initialValue = DrawerValue.Closed),
+    actionText: String? = null
 ) {
     val scope = rememberCoroutineScope()
 
@@ -113,8 +114,12 @@ fun Header(
                 Row(
                     Modifier
                         .weight(1f)
+                        .padding(end = if(actionText != null) 16.dp else 0.dp)
                         .fillMaxSize(), Arrangement.End, Alignment.CenterVertically
                 ) {
+                    if(actionText != null){
+                        Text(text = actionText, fontFamily = Poppins, color = Color.White)
+                    }
                     if (actionPress != null) {
                         IconButton(onClick = actionPress) {
                             Icon(

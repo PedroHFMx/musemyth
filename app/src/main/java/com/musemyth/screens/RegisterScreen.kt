@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,6 +65,7 @@ import com.musemyth.services.UserServices
 import com.musemyth.services.fbError
 import com.musemyth.services.isLoading
 import com.musemyth.services.showModal
+import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.bgColor
 import com.musemyth.ui.theme.errorColor
 import com.musemyth.ui.theme.primary
@@ -160,13 +162,18 @@ fun RegisterScreen(navController: NavController? = null) {
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = name,
+                enabled = !isLoading,
                 onValueChange = { handleErrors(nameI = it.trim()); if (it.length <= 28) name = it },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words,
                     keyboardType = KeyboardType.Text, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
                     onNext = { emailFocusRequester.requestFocus() }
                 ),
-                label = { Text(text = "Nome") },
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = Poppins
+                ),
+                label = { Text(text = "Nome", fontSize = 14.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Person, contentDescription = "") },
                 trailingIcon = {
                     if (name.isNotEmpty()) {
@@ -199,8 +206,13 @@ fun RegisterScreen(navController: NavController? = null) {
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = email,
+                enabled = !isLoading,
                 onValueChange = { handleErrors(emailI = it.trim()); email = it },
-                label = { Text(text = "Email") },
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = Poppins
+                ),
+                label = { Text(text = "Email", fontSize = 14.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = "") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
@@ -238,8 +250,13 @@ fun RegisterScreen(navController: NavController? = null) {
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = password,
+                enabled = !isLoading,
                 onValueChange = { handleErrors(passwordI = it); password = it },
-                label = { Text(text = "Senha") },
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = Poppins
+                ),
+                label = { Text(text = "Senha", fontSize = 14.sp) },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
@@ -280,13 +297,18 @@ fun RegisterScreen(navController: NavController? = null) {
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = confirmPassword,
+                enabled = !isLoading,
                 onValueChange = {
                     handleErrors(
                         conPasswordI = it,
                         passwordI = password
                     ); confirmPassword = it
                 },
-                label = { Text(text = "Confirmar Senha") },
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = Poppins
+                ),
+                label = { Text(text = "Confirmar Senha", fontSize = 14.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Password),
@@ -344,7 +366,7 @@ fun RegisterScreen(navController: NavController? = null) {
                         name,
                     ); handleRegisterUser()
                 }) {
-                if (!isLoading) Text(text = "Cadastrar", fontSize = 16.sp) else {
+                if (!isLoading) Text(text = "Cadastrar", fontSize = 14.sp) else {
                     CircularProgressIndicator(color = Color.White)
                 }
             }

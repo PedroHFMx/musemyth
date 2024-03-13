@@ -7,12 +7,13 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.musemyth.model.User
-import com.musemyth.model.isLoadingUser
-import com.musemyth.model.user
+import com.musemyth.screens.hasUser
 
 var isLoading by mutableStateOf(false)
 var showModal by mutableStateOf(false)
 var fbError by mutableStateOf("")
+var isLoadingUser by mutableStateOf(false)
+var user by mutableStateOf(User())
 
 fun fetchUserProfileData() {
     isLoadingUser = true
@@ -33,7 +34,8 @@ fun fetchAllData() {
     fetchStorylinesTables()
     fetchCharactersTables()
     fetchUserProfileData()
-
+    fetchUserStorylines()
+    fetchUserCharacters()
 }
 
 class UserServices {
@@ -45,6 +47,7 @@ class UserServices {
         isLoading = true
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
+                hasUser = true
                 fetchAllData()
                 navController.navigate("home") {
                     popUpTo(0) {
@@ -83,13 +86,11 @@ class UserServices {
                     }
                     .addOnFailureListener { exception ->
                         showModal = true
-                        println("Deu erro: " + exception.message)
                         fbError = exception.message!!
                     }
             }
             .addOnFailureListener { exception ->
                 showModal = true
-                println("Deu erro: " + exception.message)
                 fbError = exception.message!!
             }
     }

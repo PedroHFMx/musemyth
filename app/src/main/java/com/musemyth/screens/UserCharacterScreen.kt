@@ -1,5 +1,6 @@
 package com.musemyth.screens
 
+import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,24 +47,27 @@ import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
 import com.musemyth.components.ShowModal
+import com.musemyth.model.UserChar
 import com.musemyth.model.UserStoryline
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
 import com.musemyth.services.showModal
 import com.musemyth.ui.theme.Poppins
+import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
+import com.musemyth.ui.theme.statusBarColor
 import com.musemyth.ui.theme.statusBarSecondaryColor
 import com.musemyth.utils.HandleFirebaseError
 
-var isLoadingStories by mutableStateOf(false)
-var story by mutableStateOf(emptyList<UserStoryline>())
+var isLoadingCharacters by mutableStateOf(false)
+var char by mutableStateOf(emptyList<UserChar>())
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserStorylinesScreen(navController: NavController) {
+fun UserCharactersScreen(navController: NavController) {
 
     val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(statusBarSecondaryColor)
+    systemUiController.setSystemBarsColor(statusBarColor)
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -86,17 +90,17 @@ fun UserStorylinesScreen(navController: NavController) {
         ) {
             Column(Modifier.weight(1f)) {
                 Header(
-                    title = "Seus Storylines Salvos",
-                    bgColor = secondary,
+                    title = "Seus Personagens Salvos",
+                    bgColor = primary,
                     navController = navController,
-                    actionText = story.size.toString().padStart(2, '0') + "/10"
+                    actionText = char.size.toString().padStart(2, '0') + "/10"
                 )
-                if (!isLoadingStories)
+                if (!isLoadingCharacters)
                     LazyColumn(
                         contentPadding = PaddingValues(top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if(story.size < 10) 0.dp else 16.dp),
+                            bottom = if(char.size < 10) 0.dp else 16.dp),
                         content = {
-                            itemsIndexed(story) { index, storyH ->
+                            itemsIndexed(char) { index, charH ->
                                 val isEven = index % 2 == 0
                                 val fakeIndex = index + 1
                                 Box(
@@ -104,7 +108,7 @@ fun UserStorylinesScreen(navController: NavController) {
                                         .padding(bottom = 10.dp)
                                         .fillMaxWidth()
                                         .background(
-                                            if (isEven) secondary else Color(0xFFC05AAA),
+                                            if (isEven) primary else Color(0xFF2C2983),
                                             RoundedCornerShape(10.dp)
                                         )
                                         .clip(RoundedCornerShape(10.dp))
@@ -128,30 +132,30 @@ fun UserStorylinesScreen(navController: NavController) {
                                                 fontFamily = Poppins, fontSize = 14.sp
                                             )
                                         }
-                                        if(storyH.generatedStory?.getValue("Mundo Comum") != "")
-                                        Text(
-                                            modifier = Modifier.weight(1f),
-                                            text = "${storyH.generatedStory?.getValue("Mundo Comum")}",
-                                            fontFamily = Poppins, fontSize = 14.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.White
-                                        )
-                                        if(storyH.generatedStory?.getValue("Mundo Comum") == "")
+                                        if(charH.generatedChar?.getValue("Nome") != "")
+                                            Text(
+                                                modifier = Modifier.weight(1f),
+                                                text = "${charH.generatedChar?.getValue("Nome")}",
+                                                fontFamily = Poppins, fontSize = 14.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White
+                                            )
+                                        if(charH.generatedChar?.getValue("Nome") == "")
                                             LinearProgressIndicator(
                                                 modifier = Modifier.weight(1f),
                                                 progress = 0f,
                                                 trackColor = Color.White
                                             )
                                         IconButton(onClick = {
-                                            contentServices.deleteStoryline(
-                                                storyH.id!!,
+                                            contentServices.deleteCharacter(
+                                                charH.id!!,
                                                 scope,
                                                 snackbarHostState
                                             )
                                         }) {
                                             Icon(
                                                 Icons.Rounded.Delete,
-                                                "delete storyline",
+                                                "delete character",
                                                 tint = Color.White
                                             )
                                         }
@@ -159,7 +163,7 @@ fun UserStorylinesScreen(navController: NavController) {
                                 }
                             }
                         })
-                if (isLoadingStories)
+                if (isLoadingCharacters)
                     Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
                         CircularProgressIndicator(color = secondary)
                     }
@@ -167,11 +171,11 @@ fun UserStorylinesScreen(navController: NavController) {
 
 
 
-            if (story.size < 10)
+            if (char.size < 10)
                 Button(
                     onClick = {
-                        navController.navigate("preGenStory") {
-                            popUpTo("userStory") {
+                        navController.navigate("preGenChar") {
+                            popUpTo("userChar") {
                                 inclusive = true
                             }
                         }
@@ -180,10 +184,10 @@ fun UserStorylinesScreen(navController: NavController) {
                         .padding(16.dp)
                         .fillMaxWidth()
                         .height(55.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = secondary),
+                    colors = ButtonDefaults.buttonColors(containerColor = primary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Gerar Mais Storylines", fontSize = 14.sp)
+                    Text(text = "Gerar Mais Personagens", fontSize = 14.sp)
                 }
         }
     }

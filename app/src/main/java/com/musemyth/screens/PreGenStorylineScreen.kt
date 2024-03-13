@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.CheckBoxOutlineBlank
@@ -22,6 +23,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -66,98 +68,105 @@ fun PreGenStoryScreen(navController: NavController? = null) {
 
 
     var outListS: List<String>
-    Column(
-        Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
+
+    Scaffold {
+        innerPadding ->
         Column(
             Modifier
-                .weight(1f)
+                .fillMaxSize()
+                .padding(innerPadding)
                 .background(Color.White)
         ) {
-            Header(
-                title = "Escolha o que gerar:",
-                bgColor = secondary,
-                navController = navController!!,
-                actionPress = {
-                    val keysList = arrayListOf<String>()
-                    for (storyTable in storylineTables) {
-                        keysList.add(storyTable.table!!.keys.first())
+            Column(
+                Modifier
+                    .weight(1f)
+                    .background(Color.White)
+            ) {
+                Header(
+                    title = "Escolha o que gerar:",
+                    bgColor = secondary,
+                    navController = navController!!,
+                    actionPress = {
+                        val keysList = arrayListOf<String>()
+                        for (storyTable in storylineTables) {
+                            keysList.add(storyTable.table!!.keys.first())
+                        }
+                        noGenStoryItems = if (noGenStoryItems.isNotEmpty()) {
+                            arrayListOf()
+                        } else {
+                            keysList
+                        }
+                    },
+                    actionIcon =
+                    if (noGenStoryItems.isNotEmpty()) Icons.Rounded.CheckBoxOutlineBlank
+                    else Icons.Rounded.CheckBox
+                )
+                if (isLoadingStories)
+                    Box(Modifier.fillMaxSize(), Alignment.Center) {
+                        CircularProgressIndicator(color = Color.Black)
                     }
-                    noGenStoryItems = if (noGenStoryItems.isNotEmpty()) {
-                        arrayListOf()
-                    } else {
-                        keysList
-                    }
-                },
-                actionIcon =
-                if (noGenStoryItems.isNotEmpty()) Icons.Rounded.CheckBoxOutlineBlank
-                else Icons.Rounded.CheckBox
-            )
-            if (isLoadingStories)
-                Box(Modifier.fillMaxSize(), Alignment.Center) {
-                    CircularProgressIndicator(color = Color.Black)
-                }
-            if (!isLoadingStories)
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(0.dp),
-                    content = {
-                        itemsIndexed(
-                            storylineTables
-                        ) { _, item ->
-                            Card(
-                                Modifier.clickable {
-                                    if (noGenStoryItems.contains(item.table!!.keys.first())) {
-                                        outListS = noGenStoryItems - item.table.keys.first()
-                                        noGenStoryItems = outListS
-                                    } else {
-                                        outListS = noGenStoryItems + item.table.keys.first()
-                                        noGenStoryItems = outListS
-                                    }
-                                },
-                                colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-                            ) {
-                                Row(
-                                    Modifier
-                                        .fillMaxSize()
-                                        .padding(16.dp), Arrangement.SpaceBetween
+                if (!isLoadingStories)
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(0.dp),
+                        content = {
+                            itemsIndexed(
+                                storylineTables
+                            ) { _, item ->
+                                Card(
+                                    Modifier.clickable {
+                                        if (noGenStoryItems.contains(item.table!!.keys.first())) {
+                                            outListS = noGenStoryItems - item.table.keys.first()
+                                            noGenStoryItems = outListS
+                                        } else {
+                                            outListS = noGenStoryItems + item.table.keys.first()
+                                            noGenStoryItems = outListS
+                                        }
+                                    },
+                                    colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                                 ) {
-                                    Text(text = item.table!!.keys.first(), fontFamily = Poppins)
-                                    Icon(
-                                        imageVector =
-                                        if (noGenStoryItems.contains(item.table.keys.first())) Icons.Rounded.CheckBoxOutlineBlank
-                                        else Icons.Rounded.CheckBox,
-                                        contentDescription = ""
-                                    )
+                                    Row(
+                                        Modifier
+                                            .fillMaxSize()
+                                            .padding(16.dp), Arrangement.SpaceBetween
+                                    ) {
+                                        Text(text = item.table!!.keys.first(), fontFamily = Poppins)
+                                        Icon(
+                                            imageVector =
+                                            if (noGenStoryItems.contains(item.table.keys.first())) Icons.Rounded.CheckBoxOutlineBlank
+                                            else Icons.Rounded.CheckBox,
+                                            contentDescription = ""
+                                        )
+                                    }
                                 }
                             }
-                        }
-                    })
+                        })
+            }
+
+            if (!isLoadingStories)
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp), Alignment.Center
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp),
+                        enabled = telaRenderizada,
+                        onClick = { if (telaRenderizada){
+                            navController!!.navigate("genStory") {
+                                popUpTo("preGenStory") {
+                                    inclusive = true
+                                }
+                            }
+                        } },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = secondary)
+                    ) {
+                        Text(text = "Gerar Storyline", fontFamily = Poppins)
+                    }
+                }
         }
 
-        if (!isLoadingStories)
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp), Alignment.Center
-            ) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
-                    enabled = telaRenderizada,
-                    onClick = { if (telaRenderizada){
-                        navController!!.navigate("genStory") {
-                            popUpTo("preGenStory") {
-                                inclusive = true
-                            }
-                        }
-                    } },
-                    colors = ButtonDefaults.buttonColors(containerColor = secondary)
-                ) {
-                    Text(text = "Gerar Storyline", fontFamily = Poppins)
-                }
-            }
     }
 }

@@ -73,11 +73,11 @@ fun ShowModal(
                 )
                 Text(
                     text = title, fontWeight = FontWeight.Light, textAlign = TextAlign.Center,
-                    fontSize = 22.sp
+                    fontSize = 18.sp
                 )
                 Text(
                     text = content, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center,
-                    fontSize = 16.sp
+                    fontSize = 14.sp
                 )
                 Row {
                     if (twoButtons)

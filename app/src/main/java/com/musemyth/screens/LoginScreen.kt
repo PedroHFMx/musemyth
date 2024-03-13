@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -64,6 +65,7 @@ import com.musemyth.services.UserServices
 import com.musemyth.services.fbError
 import com.musemyth.services.isLoading
 import com.musemyth.services.showModal
+import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.bgColor
 import com.musemyth.ui.theme.errorColor
 import com.musemyth.ui.theme.primary
@@ -128,6 +130,10 @@ fun LoginScreen(navController: NavController? = null) {
                 .height(60.dp)
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
+            textStyle = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = Poppins
+            ),
             shape = RoundedCornerShape(10.dp),
             value = email,
             onValueChange = { handleErrors(it.trim(), null); email = it },
@@ -138,7 +144,7 @@ fun LoginScreen(navController: NavController? = null) {
                     focusRequester.requestFocus()
                 }
             ),
-            label = { Text(text = "Email") },
+            label = { Text(text = "Email", fontSize = 14.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Email, contentDescription = "email"
@@ -177,12 +183,16 @@ fun LoginScreen(navController: NavController? = null) {
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
             shape = RoundedCornerShape(10.dp),
+            textStyle = TextStyle(
+                fontSize = 14.sp,
+                fontFamily = Poppins
+            ),
             value = password,
             onValueChange = { handleErrors(null, it); password = it },
             visualTransformation =
             if (showPassword) VisualTransformation.None
             else PasswordVisualTransformation(),
-            label = { Text(text = "Senha") },
+            label = { Text(text = "Senha", fontSize = 14.sp) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -226,7 +236,7 @@ fun LoginScreen(navController: NavController? = null) {
             Text(
                 text = "Esqueci minha senha",
                 color = Color.Black,
-                fontSize = 16.sp
+                fontSize = 14.sp
             )
         }
         Spacer(modifier = Modifier.padding(4.dp))
@@ -243,7 +253,7 @@ fun LoginScreen(navController: NavController? = null) {
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
             onClick = { handleErrors(email, password); handleLogin() }) {
-            if (!isLoading) Text(text = "Entrar", fontSize = 16.sp) else {
+            if (!isLoading) Text(text = "Entrar", fontSize = 14.sp) else {
                 CircularProgressIndicator(color = Color.White)
             }
         }
@@ -254,10 +264,10 @@ fun LoginScreen(navController: NavController? = null) {
             enabled = !isLoading
         ) {
             Text(text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Black, fontSize = 16.sp)) {
+                withStyle(style = SpanStyle(color = Color.Black, fontSize = 14.sp)) {
                     append("Não tem conta? ")
                 }
-                withStyle(style = SpanStyle(color = primary, fontSize = 16.sp)) {
+                withStyle(style = SpanStyle(color = primary, fontSize = 14.sp)) {
                     append("Cadastrar")
                 }
             })

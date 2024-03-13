@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,10 +48,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
 import com.musemyth.components.Header
 import com.musemyth.components.ShowModal
-import com.musemyth.model.isLoadingUser
-import com.musemyth.model.user
 import com.musemyth.services.UserServices
+import com.musemyth.services.isLoadingUser
 import com.musemyth.services.showModal
+import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.errorColor
 import com.musemyth.ui.theme.primary
@@ -72,237 +73,272 @@ fun HomeScreen(navController: NavController? = null) {
 
     val userServices = UserServices()
 
-    ModalNavigationDrawer(
-        drawerContent = {
-            Box(
-                Modifier, Alignment.CenterStart
-            ) {
-                ModalDrawerSheet(
-                    Modifier.fillMaxWidth(0.75f)
+    Scaffold { innerPadding ->
+        ModalNavigationDrawer(
+            modifier = Modifier.padding(innerPadding),
+            drawerContent = {
+                Box(
+                    Modifier, Alignment.CenterStart
                 ) {
-                    if (showModal) {
-                        ShowModal(
-                            onDismiss = { showModal = false },
-                            icon = Icons.AutoMirrored.Rounded.ExitToApp,
-                            title = "Sair da conta?",
-                            content = "Tem certeza que deseja fazer logout?",
-                            onConfirm = { showModal = false; userServices.signOut(navController!!) },
-                            twoButtons = true,
-                            dismissTxtBtn = "Não",
-                            confirmBtnTxt = "Sim",
-                        )
-                    }
-                    Column(Modifier.fillMaxSize()) {
-                        Surface(contentColor = Color.White, color = Color.Transparent) {
-                            Box(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .background(primary),
-                                Alignment.CenterStart
-                            ) {
-                                Row(
-                                    Modifier.padding(16.dp, 24.dp),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    ModalDrawerSheet(
+                        Modifier.fillMaxWidth(0.75f)
+                    ) {
+                        if (showModal) {
+                            ShowModal(
+                                onDismiss = { showModal = false },
+                                icon = Icons.AutoMirrored.Rounded.ExitToApp,
+                                title = "Sair da conta?",
+                                content = "Tem certeza que deseja fazer logout?",
+                                onConfirm = {
+                                    showModal = false; userServices.signOut(navController!!)
+                                },
+                                twoButtons = true,
+                                dismissTxtBtn = "Não",
+                                confirmBtnTxt = "Sim",
+                            )
+                        }
+                        Column(Modifier.fillMaxSize()) {
+                            Surface(contentColor = Color.White, color = Color.Transparent) {
+                                Box(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .background(primary),
+                                    Alignment.CenterStart
                                 ) {
-                                    Box(
-                                        Modifier
-                                            .background(
-                                                Color.White,
-                                                shape = ShapeDefaults.ExtraLarge
-                                            )
-                                            .size(35.dp), Alignment.Center
+                                    Row(
+                                        Modifier.padding(16.dp, 24.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(10.dp),
                                     ) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Person,
-                                            tint = primary,
-                                            contentDescription = "account"
-                                        )
+                                        Box(
+                                            Modifier
+                                                .background(
+                                                    Color.White,
+                                                    shape = ShapeDefaults.ExtraLarge
+                                                )
+                                                .size(35.dp), Alignment.Center
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Rounded.Person,
+                                                tint = primary,
+                                                contentDescription = "account"
+                                            )
+                                        }
+                                        if (isLoadingUser)
+                                            LinearProgressIndicator()
+                                        if (!isLoadingUser)
+                                            Column {
+                                                Text(
+                                                    text = "${user.name}",
+                                                    fontFamily = Poppins,
+                                                    fontSize = 14.sp,
+                                                    fontWeight = FontWeight.Normal
+                                                )
+                                                Text(
+                                                    text = "${user.email}",
+                                                    fontFamily = Poppins,
+                                                    fontSize = 14.sp,
+                                                    fontWeight = FontWeight.Normal
+                                                )
+                                                Text(
+                                                    text = "${user.accountType}",
+                                                    fontFamily = Poppins,
+                                                    fontSize = 14.sp,
+                                                    fontWeight = FontWeight.Normal
+                                                )
+                                            }
                                     }
-                                    if (isLoadingUser)
-                                        LinearProgressIndicator()
-                                    if (!isLoadingUser)
-                                        Column {
-                                            Text(
-                                                text = "${user.name}",
-                                                fontFamily = Poppins,
-                                                fontWeight = FontWeight.Normal
+
+                                }
+                            }
+                            Surface {
+                                Column {
+                                    Card(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                scope.launch {
+                                                    drawerState.apply {
+                                                        close().apply { navController?.navigate("userStory") }
+                                                    }
+                                                }
+
+                                            },
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Row(
+                                            Modifier.padding(16.dp),
+                                            Arrangement.spacedBy(10.dp),
+                                            Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Rounded.Article,
+                                                contentDescription = "account",
+                                                Modifier.size(20.dp),
+                                                tint = secondary,
                                             )
                                             Text(
-                                                text = "${user.email}",
+                                                text = "Storylines Salvos",
                                                 fontFamily = Poppins,
+                                                fontSize = 14.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
+                                        }
+                                    }
+                                    Card(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                scope.launch {
+                                                    drawerState.apply {
+                                                        close().apply { navController?.navigate("userChar") }
+                                                    }
+                                                }
+                                            },
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Row(
+                                            Modifier.padding(16.dp),
+                                            Arrangement.spacedBy(10.dp),
+                                            Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Rounded.Person,
+                                                contentDescription = "account",
+                                                Modifier.size(20.dp),
+                                                tint = primary,
+                                            )
                                             Text(
-                                                text = "${user.accountType}",
+                                                text = "Personagens Salvos",
+                                                fontFamily = Poppins,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Normal
+                                            )
+                                        }
+                                    }
+                                    Divider(Modifier.padding(16.dp))
+                                    Card(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable { /* TODO */ },
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Row(
+                                            Modifier.padding(16.dp),
+                                            Arrangement.spacedBy(10.dp),
+                                            Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Rounded.Info,
+                                                contentDescription = "account",
+                                                Modifier.size(20.dp),
+                                                tint = Color.Black,
+                                            )
+                                            Text(
+                                                text = "Explicação Sobre Storylines",
+                                                fontSize = 14.sp,
                                                 fontFamily = Poppins,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
-                                }
-
-                            }
-                        }
-                        Surface {
-                            Column {
-                                Card(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            scope.launch {
-                                                drawerState.apply {
-                                                    close()
-                                                }
-                                            }; navController?.navigate("userStory")
-                                        },
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = Color.Transparent
-                                    )
-                                ) {
-                                    Row(
-                                        Modifier.padding(16.dp),
-                                        Arrangement.spacedBy(10.dp),
-                                        Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Rounded.Article,
-                                            contentDescription = "account",
-                                            Modifier.size(20.dp),
-                                            tint = secondary,
-                                        )
-                                        Text(
-                                            text = "Meus Storylines",
-                                            fontFamily = Poppins,
-                                            fontWeight = FontWeight.Normal
-                                        )
                                     }
-                                }
-                                Row(
-                                    Modifier.padding(16.dp),
-                                    Arrangement.spacedBy(10.dp),
-                                    Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Person,
-                                        contentDescription = "account",
-                                        Modifier.size(20.dp),
-                                        tint = primary,
-                                    )
-                                    Text(
-                                        text = "Meus Personagens",
-                                        fontFamily = Poppins,
-                                        fontWeight = FontWeight.Normal
-                                    )
-                                }
-                                Divider(Modifier.padding(16.dp))
-                                Card(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .clickable { /* TODO */ }, colors = CardDefaults.cardColors(
-                                        containerColor = Color.Transparent
-                                    )
-                                ) {
-                                    Row(
-                                        Modifier.padding(16.dp),
-                                        Arrangement.spacedBy(10.dp),
-                                        Alignment.CenterVertically
+                                    Divider(Modifier.padding(16.dp))
+                                    Card(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable { showModal = true },
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.Transparent
+                                        )
                                     ) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Info,
-                                            contentDescription = "account",
-                                            Modifier.size(20.dp),
-                                            tint = Color.Black,
-                                        )
-                                        Text(
-                                            text = "Explicação Sobre Storylines",
-                                            fontFamily = Poppins,
-                                            fontWeight = FontWeight.Normal
-                                        )
-                                    }
-                                }
-                                Divider(Modifier.padding(16.dp))
-                                Card(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .clickable { showModal = true },
-                                    colors = CardDefaults.cardColors(
-                                        containerColor = Color.Transparent
-                                    )
-                                ) {
-                                    Row(
-                                        Modifier.padding(16.dp),
-                                        Arrangement.spacedBy(10.dp),
-                                        Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
-                                            contentDescription = "account",
-                                            Modifier.size(20.dp),
-                                            tint = errorColor,
-                                        )
-                                        Text(
-                                            text = "Sair da Conta",
-                                            fontFamily = Poppins,
-                                            fontWeight = FontWeight.Normal
-                                        )
+                                        Row(
+                                            Modifier.padding(16.dp),
+                                            Arrangement.spacedBy(10.dp),
+                                            Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Rounded.ExitToApp,
+                                                contentDescription = "account",
+                                                Modifier.size(20.dp),
+                                                tint = errorColor,
+                                            )
+                                            Text(
+                                                text = "Sair da Conta",
+                                                fontFamily = Poppins,
+                                                fontSize = 14.sp,
+                                                fontWeight = FontWeight.Normal
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                }
-            }
-        }, drawerState = drawerState, gesturesEnabled = true
-    ) {
-        Column(Modifier.fillMaxSize()) {
-
-            Header(isHome = true, drawerState = drawerState)
-            Column(Modifier.padding(0.dp), Arrangement.spacedBy(0.dp)) {
-
-                Button(
-                    onClick = { navController!!.navigate("preGenStory") },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxSize(),
-                    shape = RoundedCornerShape(0.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = secondary)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
-                    ) {
-                        Image(
-                            modifier = Modifier.size(200.dp),
-                            painter = painterResource(id = R.drawable.storyline_generate),
-                            contentDescription = "",
-                        )
-                        Text(
-                            text = "Gerar Storyline", fontSize = 22.sp, fontWeight = FontWeight.Bold
-                        )
                     }
                 }
-                Button(
-                    onClick = { navController!!.navigate("preGenChar") },
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxSize(),
-                    shape = RoundedCornerShape(0.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
+            }, drawerState = drawerState, gesturesEnabled = true
+        ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+            ) {
+
+                Header(isHome = true, drawerState = drawerState)
+                Column(Modifier.padding(0.dp), Arrangement.spacedBy(0.dp)) {
+
+                    Button(
+                        onClick = { navController!!.navigate("preGenStory") },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxSize(),
+                        shape = RoundedCornerShape(0.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = secondary)
                     ) {
-                        Image(
-                            modifier = Modifier.size(200.dp),
-                            painter = painterResource(id = R.drawable.character_generate),
-                            contentDescription = "",
-                        )
-                        Text(
-                            text = "Gerar Personagem",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            Image(
+                                modifier = Modifier.size(200.dp),
+                                painter = painterResource(id = R.drawable.storyline_generate),
+                                contentDescription = "",
+                            )
+                            Text(
+                                text = "Gerar Storyline",
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    Button(
+                        onClick = { navController!!.navigate("preGenChar") },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxSize(),
+                        shape = RoundedCornerShape(0.dp)
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                        ) {
+                            Image(
+                                modifier = Modifier.size(200.dp),
+                                painter = painterResource(id = R.drawable.character_generate),
+                                contentDescription = "",
+                            )
+                            Text(
+                                text = "Gerar Personagem",
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

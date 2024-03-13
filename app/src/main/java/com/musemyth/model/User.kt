@@ -9,9 +9,6 @@ import com.musemyth.services.fetchCharactersTables
 import com.musemyth.services.fetchStorylinesTables
 import com.musemyth.services.fetchUserProfileData
 
-var isLoadingUser by mutableStateOf(false)
-var user by mutableStateOf(User())
-
 class User(
    val name: String? = null,
    val accountType: String? = null,
