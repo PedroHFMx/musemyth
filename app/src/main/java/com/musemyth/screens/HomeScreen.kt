@@ -306,7 +306,7 @@ fun HomeScreen(navController: NavController? = null) {
                             verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
                             Image(
-                                modifier = Modifier.size(200.dp),
+                                modifier = Modifier.size(170.dp),
                                 painter = painterResource(id = R.drawable.storyline_generate),
                                 contentDescription = "",
                             )
@@ -329,7 +329,7 @@ fun HomeScreen(navController: NavController? = null) {
                             verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
                             Image(
-                                modifier = Modifier.size(200.dp),
+                                modifier = Modifier.size(170.dp),
                                 painter = painterResource(id = R.drawable.character_generate),
                                 contentDescription = "",
                             )

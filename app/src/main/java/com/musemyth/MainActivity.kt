@@ -20,6 +20,8 @@ import com.musemyth.screens.GenerateStorylineScreen
 import com.musemyth.screens.HomeScreen
 import com.musemyth.screens.LoadingScreen
 import com.musemyth.screens.LoginScreen
+import com.musemyth.screens.LookCharacterScreen
+import com.musemyth.screens.LookStorylineScreen
 import com.musemyth.screens.PreGenCharScreen
 import com.musemyth.screens.PreGenStoryScreen
 import com.musemyth.screens.RecoverPasswordScreen
@@ -69,6 +71,8 @@ class MainActivity : ComponentActivity() {
                         composable("preGenChar") { PreGenCharScreen(navController) }
                         composable("genChar") { GenerateCharacterScreen(navController) }
                         composable("genStory") { GenerateStorylineScreen(navController) }
+                        composable("lookStory") { LookStorylineScreen(navController) }
+                        composable("lookChar") { LookCharacterScreen(navController) }
                     }
                 }
             }

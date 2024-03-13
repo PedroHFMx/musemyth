@@ -1,6 +1,5 @@
 package com.musemyth.screens
 
-import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,9 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
-import com.musemyth.components.ShowModal
 import com.musemyth.model.UserChar
-import com.musemyth.model.UserStoryline
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
 import com.musemyth.services.showModal
@@ -56,7 +53,6 @@ import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarColor
-import com.musemyth.ui.theme.statusBarSecondaryColor
 import com.musemyth.utils.HandleFirebaseError
 
 var isLoadingCharacters by mutableStateOf(false)
@@ -74,7 +70,7 @@ fun UserCharactersScreen(navController: NavController) {
 
     val contentServices = ContentServices()
 
-    if(showModal){
+    if (showModal) {
         HandleFirebaseError(fbError)
     }
 
@@ -97,8 +93,10 @@ fun UserCharactersScreen(navController: NavController) {
                 )
                 if (!isLoadingCharacters)
                     LazyColumn(
-                        contentPadding = PaddingValues(top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if(char.size < 10) 0.dp else 16.dp),
+                        contentPadding = PaddingValues(
+                            top = 16.dp, end = 16.dp, start = 16.dp,
+                            bottom = if (char.size < 10) 0.dp else 16.dp
+                        ),
                         content = {
                             itemsIndexed(char) { index, charH ->
                                 val isEven = index % 2 == 0
@@ -112,7 +110,9 @@ fun UserCharactersScreen(navController: NavController) {
                                             RoundedCornerShape(10.dp)
                                         )
                                         .clip(RoundedCornerShape(10.dp))
-                                        .clickable { }
+                                        .clickable {
+                                            charIndex = index; navController.navigate("lookChar")
+                                        }
                                 ) {
                                     Row(
                                         Modifier
@@ -132,7 +132,7 @@ fun UserCharactersScreen(navController: NavController) {
                                                 fontFamily = Poppins, fontSize = 14.sp
                                             )
                                         }
-                                        if(charH.generatedChar?.getValue("Nome") != "")
+                                        if (charH.generatedChar?.getValue("Nome") != "")
                                             Text(
                                                 modifier = Modifier.weight(1f),
                                                 text = "${charH.generatedChar?.getValue("Nome")}",
@@ -140,7 +140,7 @@ fun UserCharactersScreen(navController: NavController) {
                                                 fontWeight = FontWeight.Bold,
                                                 color = Color.White
                                             )
-                                        if(charH.generatedChar?.getValue("Nome") == "")
+                                        if (charH.generatedChar?.getValue("Nome") == "")
                                             LinearProgressIndicator(
                                                 modifier = Modifier.weight(1f),
                                                 progress = 0f,
@@ -183,11 +183,11 @@ fun UserCharactersScreen(navController: NavController) {
                     Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
-                        .height(55.dp),
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = primary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Gerar Mais Personagens", fontSize = 14.sp)
+                    Text(text = "Gerar Mais Personagens", fontSize = 15.sp)
                 }
         }
     }

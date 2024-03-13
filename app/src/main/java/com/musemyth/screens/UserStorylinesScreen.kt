@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
-import com.musemyth.components.ShowModal
 import com.musemyth.model.UserStoryline
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
@@ -70,7 +69,7 @@ fun UserStorylinesScreen(navController: NavController) {
 
     val contentServices = ContentServices()
 
-    if(showModal){
+    if (showModal) {
         HandleFirebaseError(fbError)
     }
 
@@ -93,8 +92,10 @@ fun UserStorylinesScreen(navController: NavController) {
                 )
                 if (!isLoadingStories)
                     LazyColumn(
-                        contentPadding = PaddingValues(top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if(story.size < 10) 0.dp else 16.dp),
+                        contentPadding = PaddingValues(
+                            top = 16.dp, end = 16.dp, start = 16.dp,
+                            bottom = if (story.size < 10) 0.dp else 16.dp
+                        ),
                         content = {
                             itemsIndexed(story) { index, storyH ->
                                 val isEven = index % 2 == 0
@@ -108,7 +109,9 @@ fun UserStorylinesScreen(navController: NavController) {
                                             RoundedCornerShape(10.dp)
                                         )
                                         .clip(RoundedCornerShape(10.dp))
-                                        .clickable { }
+                                        .clickable {
+                                            storyIndex = index; navController.navigate("lookStory")
+                                        }
                                 ) {
                                     Row(
                                         Modifier
@@ -128,15 +131,15 @@ fun UserStorylinesScreen(navController: NavController) {
                                                 fontFamily = Poppins, fontSize = 14.sp
                                             )
                                         }
-                                        if(storyH.generatedStory?.getValue("Mundo Comum") != "")
-                                        Text(
-                                            modifier = Modifier.weight(1f),
-                                            text = "${storyH.generatedStory?.getValue("Mundo Comum")}",
-                                            fontFamily = Poppins, fontSize = 14.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.White
-                                        )
-                                        if(storyH.generatedStory?.getValue("Mundo Comum") == "")
+                                        if (storyH.generatedStory?.getValue("Mundo Comum") != "")
+                                            Text(
+                                                modifier = Modifier.weight(1f),
+                                                text = "${storyH.generatedStory?.getValue("Mundo Comum")}",
+                                                fontFamily = Poppins, fontSize = 14.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = Color.White
+                                            )
+                                        if (storyH.generatedStory?.getValue("Mundo Comum") == "")
                                             LinearProgressIndicator(
                                                 modifier = Modifier.weight(1f),
                                                 progress = 0f,
@@ -179,11 +182,11 @@ fun UserStorylinesScreen(navController: NavController) {
                     Modifier
                         .padding(16.dp)
                         .fillMaxWidth()
-                        .height(55.dp),
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = secondary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Gerar Mais Storylines", fontSize = 14.sp)
+                    Text(text = "Gerar Mais Storylines", fontSize = 15.sp)
                 }
         }
     }

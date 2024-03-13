@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="LookStorylineScreen">
+        <State />
+      </entry>
       <entry key="ShowModal">
         <State />
       </entry>
@@ -18,7 +21,7 @@
               </deviceKey>
             </Target>
           </targetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-05T14:13:23.916277100Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-13T17:01:49.464459100Z" />
         </State>
       </entry>
     </value>

@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckBox
@@ -26,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,14 +35,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.components.Header
-import com.musemyth.services.characterTables
-import com.musemyth.services.fetchStorylinesTables
 import com.musemyth.services.isLoadingStories
 import com.musemyth.services.storylineTables
 import com.musemyth.ui.theme.Poppins
@@ -60,17 +62,16 @@ fun PreGenStoryScreen(navController: NavController? = null) {
 
     var telaRenderizada by remember { mutableStateOf(false) }
 
-        // Simula um processo de renderização assíncrona
-        LaunchedEffect(telaRenderizada) {
-            delay(0) // Simula a renderização demorada
-            telaRenderizada = true
-        }
+    // Simula um processo de renderização assíncrona
+    LaunchedEffect(telaRenderizada) {
+        delay(0) // Simula a renderização demorada
+        telaRenderizada = true
+    }
 
 
     var outListS: List<String>
 
-    Scaffold {
-        innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             Modifier
                 .fillMaxSize()
@@ -127,14 +128,46 @@ fun PreGenStoryScreen(navController: NavController? = null) {
                                     Row(
                                         Modifier
                                             .fillMaxSize()
-                                            .padding(16.dp), Arrangement.SpaceBetween
+                                            .padding(16.dp),
+                                        Arrangement.spacedBy(16.dp),
+                                        Alignment.CenterVertically
                                     ) {
-                                        Text(text = item.table!!.keys.first(), fontFamily = Poppins)
+                                        Row(
+                                            Modifier.weight(1f),
+                                            Arrangement.spacedBy(16.dp),
+                                            Alignment.CenterVertically
+                                        ) {
+                                            Box(
+                                                Modifier
+                                                    .clip(CircleShape)
+                                                    .size(55.dp)
+                                                    .background(secondary),
+                                                Alignment.Center
+                                            ) {
+                                                Text(
+                                                    item.table!!.keys.first()[0] +
+                                                            item.table.keys.first()[1].toString()
+                                                                .trim()
+                                                                .padEnd(
+                                                                    1,
+                                                                    item.table.keys.first()[2]
+                                                                ),
+                                                    Modifier.padding(16.dp),
+                                                    color = Color.White,
+                                                    fontSize = 15.sp
+                                                )
+                                            }
+                                            Text(
+                                                text = item.table!!.keys.first(),
+                                                fontFamily = Poppins,
+                                                fontWeight = FontWeight.Normal
+                                            )
+                                        }
                                         Icon(
                                             imageVector =
-                                            if (noGenStoryItems.contains(item.table.keys.first())) Icons.Rounded.CheckBoxOutlineBlank
+                                            if (noGenStoryItems.contains(item.table!!.keys.first())) Icons.Rounded.CheckBoxOutlineBlank
                                             else Icons.Rounded.CheckBox,
-                                            contentDescription = ""
+                                            contentDescription = "check storyline item"
                                         )
                                     }
                                 }
@@ -151,19 +184,21 @@ fun PreGenStoryScreen(navController: NavController? = null) {
                     Button(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(55.dp),
+                            .height(50.dp),
                         enabled = telaRenderizada,
-                        onClick = { if (telaRenderizada){
-                            navController!!.navigate("genStory") {
-                                popUpTo("preGenStory") {
-                                    inclusive = true
+                        onClick = {
+                            if (telaRenderizada) {
+                                navController!!.navigate("genStory") {
+                                    popUpTo("preGenStory") {
+                                        inclusive = true
+                                    }
                                 }
                             }
-                        } },
+                        },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = secondary)
                     ) {
-                        Text(text = "Gerar Storyline", fontFamily = Poppins)
+                        Text(text = "Gerar Storyline", fontFamily = Poppins, fontSize = 15.sp)
                     }
                 }
         }

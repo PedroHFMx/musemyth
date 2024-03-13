@@ -132,8 +132,8 @@ fun GenerateCharacterScreen(navController: NavController? = null) {
                             ) {
                                 Box(
                                     Modifier
-                                        .size(60.dp)
                                         .clip(CircleShape)
+                                        .size(55.dp)
                                         .background(primary),
                                     Alignment.Center
                                 ) {
@@ -143,7 +143,8 @@ fun GenerateCharacterScreen(navController: NavController? = null) {
                                                     .trim()
                                                     .padEnd(1, keysList[2]),
                                         Modifier.padding(16.dp),
-                                        color = Color.White
+                                        color = Color.White,
+                                        fontSize = 15.sp
                                     )
                                 }
                                 Column(Modifier.fillMaxSize()) {
@@ -181,14 +182,14 @@ fun GenerateCharacterScreen(navController: NavController? = null) {
                     },
                     Modifier
                         .weight(6f)
-                        .height(55.dp),
+                        .height(50.dp),
                     enabled = !isLoading,
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = secondary
                     )
                 ) {
-                    Text("Gerar Novamente", fontFamily = Poppins)
+                    Text("Gerar Novamente", fontFamily = Poppins, fontSize = 15.sp)
                 }
                 Button(
                     {
@@ -211,16 +212,16 @@ fun GenerateCharacterScreen(navController: NavController? = null) {
                     },
                     Modifier
                         .weight(4f)
-                        .height(55.dp), colors = ButtonDefaults.buttonColors(
+                        .height(50.dp), colors = ButtonDefaults.buttonColors(
                         containerColor = if(char.size < 10) primary else Color.Black
                     ), enabled = !isLoading, shape = RoundedCornerShape(10.dp)
                 ) {
                     if (isLoading) {
-                        CircularProgressIndicator(color = Color.White)
+                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(30.dp))
                     } else {
                         Text(
                             if (char.size < 10) "Salvar" else "Limite de 10 Personagens atingido",
-                            fontFamily = Poppins
+                            fontFamily = Poppins, fontSize = 15.sp
                         )
                     }
                 }
