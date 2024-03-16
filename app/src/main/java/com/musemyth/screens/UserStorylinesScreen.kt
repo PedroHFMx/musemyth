@@ -105,6 +105,10 @@ fun UserStorylinesScreen(navController: NavController) {
                     actionText = storyPathHandle().size.toString().padStart(2, '0') + "/10"
                 )
                 if (!isLoadingStories)
+                    if(storyPathHandle().isEmpty())
+                        Box(Modifier.fillMaxSize(), Alignment.Center){
+                            Text(text = "Nenhum Storyline salvo!")
+                        }
                     LazyColumn(
                         contentPadding = PaddingValues(
                             top = 16.dp, end = 16.dp, start = 16.dp,
@@ -136,7 +140,7 @@ fun UserStorylinesScreen(navController: NavController) {
                                     ) {
                                         Box(
                                             Modifier
-                                                .size(50.dp)
+                                                .size(40.dp)
                                                 .clip(CircleShape)
                                                 .background(if (isEven) secondary
                                                 else Color(0xFFC05AAA)), Alignment.Center
@@ -210,7 +214,7 @@ fun UserStorylinesScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = secondary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Gerar Mais Storylines", fontSize = 15.sp)
+                    Text(text = if(storyPathHandle().isEmpty()) "Gerar Storylines" else "Gerar Mais Storylines", fontSize = 15.sp)
                 }
         }
     }

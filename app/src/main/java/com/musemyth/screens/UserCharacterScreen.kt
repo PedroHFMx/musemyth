@@ -97,7 +97,10 @@ fun UserCharactersScreen(navController: NavController) {
                 .padding(innerPadding)
                 .background(primary)
         ) {
-            Column(Modifier.weight(1f).background(tertiary)) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .background(tertiary)) {
                 Header(
                     title = "Seus Personagens Salvos",
                     bgColor = primary,
@@ -105,6 +108,10 @@ fun UserCharactersScreen(navController: NavController) {
                     actionText = charPathHandle().size.toString().padStart(2, '0') + "/10"
                 )
                 if (!isLoadingCharacters)
+                    if(charPathHandle().isEmpty())
+                        Box(Modifier.fillMaxSize(), Alignment.Center){
+                            Text(text = "Nenhum Personagem salvo!")
+                        }
                     LazyColumn(
                         contentPadding = PaddingValues(
                             top = 16.dp, end = 16.dp, start = 16.dp,
@@ -136,9 +143,13 @@ fun UserCharactersScreen(navController: NavController) {
                                     ) {
                                         Box(
                                             Modifier
-                                                .size(50.dp)
+                                                .size(40.dp)
                                                 .clip(CircleShape)
-                                                .background(if (isEven) primary else Color(0xFF2C2983)), Alignment.Center
+                                                .background(
+                                                    if (isEven) primary else Color(
+                                                        0xFF2C2983
+                                                    )
+                                                ), Alignment.Center
                                         ) {
                                             Text(
                                                 text = fakeIndex.toString().padStart(2, '0'),
@@ -207,7 +218,7 @@ fun UserCharactersScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = primary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Gerar Mais Personagens", fontSize = 15.sp)
+                    Text(text = if(charPathHandle().isEmpty()) "Gerar Personagens" else "Gerar Mais Personagens", fontSize = 15.sp)
                 }
         }
     }
