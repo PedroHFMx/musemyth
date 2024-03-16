@@ -1,5 +1,5 @@
 package com.musemyth.model
 
-data class Character(
+data class Characters(
     val table: Map<String, Any>? = null,
 )

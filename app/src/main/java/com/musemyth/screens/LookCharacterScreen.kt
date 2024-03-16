@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
+import com.musemyth.model.UserChar
+import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
 
@@ -54,6 +56,15 @@ fun LookCharacterScreen(navController: NavController? = null) {
     val isEven = charIndex % 2 == 0
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(if (isEven) primary else Color(0xFF2C2983))
+
+    fun charPathHandle(): List<UserChar> {
+        return if (user.accountType == "aluno") {
+            char
+        } else {
+            studentChar
+        }
+    }
+
     Scaffold(topBar = {
         Box(
             Modifier
@@ -104,7 +115,7 @@ fun LookCharacterScreen(navController: NavController? = null) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(30.dp),
         ) {
-            char[charIndex].generatedChar?.forEach { storyline ->
+            charPathHandle()[charIndex].generatedChar?.forEach { storyline ->
                 Row(
                     Modifier.fillMaxSize(), Arrangement.spacedBy(16.dp), Alignment.CenterVertically
                 ) {

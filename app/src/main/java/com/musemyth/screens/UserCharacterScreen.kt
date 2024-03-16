@@ -48,15 +48,18 @@ import com.musemyth.components.Header
 import com.musemyth.model.UserChar
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
+import com.musemyth.services.isLoadingCharacters
 import com.musemyth.services.showModal
+import com.musemyth.services.studentId
+import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarColor
 import com.musemyth.utils.HandleFirebaseError
 
-var isLoadingCharacters by mutableStateOf(false)
 var char by mutableStateOf(emptyList<UserChar>())
+var studentChar by mutableStateOf(emptyList<UserChar>())
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +77,14 @@ fun UserCharactersScreen(navController: NavController) {
         HandleFirebaseError(fbError)
     }
 
+    fun charPathHandle(): List<UserChar> {
+        return if (user.accountType == "aluno") {
+            char
+        } else {
+            studentChar
+        }
+    }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -89,16 +100,16 @@ fun UserCharactersScreen(navController: NavController) {
                     title = "Seus Personagens Salvos",
                     bgColor = primary,
                     navController = navController,
-                    actionText = char.size.toString().padStart(2, '0') + "/10"
+                    actionText = charPathHandle().size.toString().padStart(2, '0') + "/10"
                 )
                 if (!isLoadingCharacters)
                     LazyColumn(
                         contentPadding = PaddingValues(
                             top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if (char.size < 10) 0.dp else 16.dp
+                            bottom = if (charPathHandle().size < 10) 0.dp else 16.dp
                         ),
                         content = {
-                            itemsIndexed(char) { index, charH ->
+                            itemsIndexed(charPathHandle()) { index, charH ->
                                 val isEven = index % 2 == 0
                                 val fakeIndex = index + 1
                                 Box(
@@ -147,11 +158,20 @@ fun UserCharactersScreen(navController: NavController) {
                                                 trackColor = Color.White
                                             )
                                         IconButton(onClick = {
+                                            if(user.accountType == "aluno"){
                                             contentServices.deleteCharacter(
                                                 charH.id!!,
                                                 scope,
                                                 snackbarHostState
                                             )
+                                            } else {
+                                                contentServices.deleteStudentCharacter(
+                                                    charH.id!!,
+                                                    studentId,
+                                                    scope,
+                                                    snackbarHostState,
+                                                )
+                                            }
                                         }) {
                                             Icon(
                                                 Icons.Rounded.DeleteForever,
@@ -171,7 +191,7 @@ fun UserCharactersScreen(navController: NavController) {
 
 
 
-            if (char.size < 10)
+            if (charPathHandle().size < 10 && user.accountType == "aluno")
                 Button(
                     onClick = {
                         navController.navigate("preGenChar") {

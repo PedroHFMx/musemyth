@@ -31,6 +31,7 @@ fun fetchUserProfileData() {
 }
 
 fun fetchAllData() {
+    fetchStudents()
     fetchStorylinesTables()
     fetchCharactersTables()
     fetchUserProfileData()

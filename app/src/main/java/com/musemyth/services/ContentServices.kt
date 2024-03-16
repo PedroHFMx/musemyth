@@ -9,19 +9,25 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.musemyth.model.Character
-import com.musemyth.model.Storyline
+import com.musemyth.model.Characters
+import com.musemyth.model.Storylines
+import com.musemyth.model.Student
 import com.musemyth.model.UserChar
 import com.musemyth.model.UserStoryline
 import com.musemyth.screens.char
+import com.musemyth.screens.isLoadingStudents
 import com.musemyth.screens.story
+import com.musemyth.screens.studentChar
+import com.musemyth.screens.studentStory
+import com.musemyth.screens.students
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-var storylineTables by mutableStateOf(emptyList<Storyline>())
-var characterTables by mutableStateOf(emptyList<Character>())
+var storylineTables by mutableStateOf(emptyList<Storylines>())
+var characterTables by mutableStateOf(emptyList<Characters>())
 var isLoadingStories by mutableStateOf(false)
 var isLoadingCharacters by mutableStateOf(false)
+var studentId by mutableStateOf(FirebaseAuth.getInstance().currentUser!!.uid)
 
 class ContentServices {
     fun saveStoryline(map: Map<String, Any>, navController: NavController) {
@@ -46,10 +52,33 @@ class ContentServices {
             }
     }
 
-    fun deleteStoryline(id: String, scope: CoroutineScope, snackbarHostState: SnackbarHostState){
+    fun deleteStoryline(id: String, scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
         FirebaseFirestore.getInstance()
             .collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("generatedStory")
+            .document(id)
+            .delete()
+            .addOnCompleteListener {
+                scope.launch {
+                    snackbarHostState
+                        .showSnackbar(
+                            message = "Storyline Removido com Sucesso!",
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Short,
+                        )
+                }
+            }
+            .addOnFailureListener { exception ->
+                showModal = true; fbError =
+                exception.message!!; isLoading = false
+            }
+    }
+
+    fun deleteStudentStoryline(id: String, studentId: String, scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(studentId)
             .collection("generatedStory")
             .document(id)
             .delete()
@@ -91,7 +120,30 @@ class ContentServices {
             }
     }
 
-    fun deleteCharacter(id: String, scope: CoroutineScope, snackbarHostState: SnackbarHostState){
+    fun deleteStudentCharacter(id: String, studentId: String, scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(studentId)
+            .collection("generatedChar")
+            .document(id)
+            .delete()
+            .addOnCompleteListener {
+                scope.launch {
+                    snackbarHostState
+                        .showSnackbar(
+                            message = "Personagem Removido com Sucesso!",
+                            withDismissAction = true,
+                            duration = SnackbarDuration.Short,
+                        )
+                }
+            }
+            .addOnFailureListener { exception ->
+                showModal = true; fbError =
+                exception.message!!; isLoading = false
+            }
+    }
+
+    fun deleteCharacter(id: String, scope: CoroutineScope, snackbarHostState: SnackbarHostState) {
         FirebaseFirestore.getInstance()
             .collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -116,7 +168,7 @@ class ContentServices {
 }
 
 fun fetchStorylinesTables() {
-    val storylinesList = arrayListOf<Storyline>()
+    val storylinesList = arrayListOf<Storylines>()
     isLoadingStories = true
     FirebaseFirestore.getInstance().collection("storyline")
         .addSnapshotListener { value, error ->
@@ -128,8 +180,8 @@ fun fetchStorylinesTables() {
                 storylinesList.clear()
 
                 for (doc in value.documents) {
-                    val storyline = doc.toObject(Storyline::class.java)
-                    val newStoryline = Storyline(
+                    val storyline = doc.toObject(Storylines::class.java)
+                    val newStoryline = Storylines(
                         table = storyline?.table
                     )
                     storylinesList.add(newStoryline)
@@ -140,7 +192,57 @@ fun fetchStorylinesTables() {
         }
 }
 
-fun fetchUserCharacters(){
+fun fetchStudents() {
+    isLoadingStudents = true
+    FirebaseFirestore.getInstance()
+        .collection("users")
+        .orderBy("name", Query.Direction.ASCENDING)
+        .addSnapshotListener { snapshot, _ ->
+            if (snapshot != null) {
+                val studentsList = mutableListOf<Student>()
+                for (doc in snapshot.documents) {
+                    val student = doc.toObject(Student::class.java)
+                    val newStudent = Student(
+                        id = student?.id ?: "",
+                        name = student?.name ?: "",
+                        email = student?.email ?: "",
+                        accountType = student?.accountType ?: "",
+                    )
+                    studentsList.add(newStudent)
+                }
+                students = studentsList
+                isLoadingStudents = false
+            }
+        }
+}
+
+fun fetchStudentCharacters(id: String) {
+    isLoadingCharacters = true
+    FirebaseFirestore.getInstance()
+        .collection("users")
+        .document(id)
+        .collection("generatedChar")
+        .orderBy("time", Query.Direction.ASCENDING)
+        .addSnapshotListener { snapshot, _ ->
+            if (snapshot != null) {
+                val charsList = mutableListOf<UserChar>()
+                for (doc in snapshot.documents) {
+                    val storyline = doc.toObject(UserChar::class.java)
+                    val newStoryline = UserChar(
+                        time = storyline?.time ?: "",
+                        generatedChar = storyline?.generatedChar,
+                        id = storyline?.id ?: ""
+                    )
+                    charsList.add(newStoryline)
+                }
+                studentChar = charsList
+                isLoadingCharacters = false
+            }
+        }
+}
+
+fun fetchUserCharacters() {
+    isLoadingCharacters = true
     FirebaseFirestore.getInstance()
         .collection("users")
         .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -159,12 +261,38 @@ fun fetchUserCharacters(){
                     charsList.add(newStoryline)
                 }
                 char = charsList
-                com.musemyth.screens.isLoadingCharacters = false
+                isLoadingCharacters = false
             }
         }
 }
 
-fun fetchUserStorylines(){
+fun fetchStudentStorylines(id: String) {
+    isLoadingStories = true
+    FirebaseFirestore.getInstance()
+        .collection("users")
+        .document(id)
+        .collection("generatedStory")
+        .orderBy("time", Query.Direction.ASCENDING)
+        .addSnapshotListener { snapshot, _ ->
+            if (snapshot != null) {
+                val storylinesList = mutableListOf<UserStoryline>()
+                for (doc in snapshot.documents) {
+                    val storyline = doc.toObject(UserStoryline::class.java)
+                    val newStoryline = UserStoryline(
+                        time = storyline?.time ?: "",
+                        generatedStory = storyline?.generatedStory,
+                        id = storyline?.id ?: ""
+                    )
+                    storylinesList.add(newStoryline)
+                }
+                studentStory = storylinesList
+                isLoadingStories = false
+            }
+        }
+}
+
+fun fetchUserStorylines() {
+    isLoadingStories = true
     FirebaseFirestore.getInstance()
         .collection("users")
         .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -183,17 +311,17 @@ fun fetchUserStorylines(){
                     storylinesList.add(newStoryline)
                 }
                 story = storylinesList
-                com.musemyth.screens.isLoadingStories = false
+                isLoadingStories = false
             }
         }
 }
 
 fun fetchCharactersTables() {
-    val charactersList = arrayListOf<Character>()
-    isLoadingStories = true
+    val charactersList = arrayListOf<Characters>()
+    isLoadingCharacters = true
     FirebaseFirestore.getInstance().collection("character")
         .addSnapshotListener { value, error ->
-            isLoadingStories = false
+            isLoadingCharacters = false
             if (error != null) {
                 // Handle error
                 return@addSnapshotListener
@@ -202,8 +330,8 @@ fun fetchCharactersTables() {
                 charactersList.clear()
 
                 for (doc in value.documents) {
-                    val storyline = doc.toObject(Character::class.java)
-                    val newStoryline = Character(
+                    val storyline = doc.toObject(Characters::class.java)
+                    val newStoryline = Characters(
                         table = storyline?.table
                     )
                     charactersList.add(newStoryline)

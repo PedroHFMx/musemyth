@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
+import com.musemyth.model.UserStoryline
+import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.secondary
 
@@ -53,6 +55,15 @@ fun LookStorylineScreen(navController: NavController? = null) {
     val isEven = storyIndex % 2 == 0
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(if (isEven) secondary else Color(0xFFC05AAA),)
+
+    fun storyPathHandle(): List<UserStoryline> {
+        return if (user.accountType == "aluno") {
+            story
+        } else {
+            studentStory
+        }
+    }
+
     Scaffold(topBar = {
         Box(
             Modifier
@@ -103,7 +114,7 @@ fun LookStorylineScreen(navController: NavController? = null) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(30.dp),
         ) {
-            story[storyIndex].generatedStory?.forEach { storyline ->
+            storyPathHandle()[storyIndex].generatedStory?.forEach { storyline ->
                 Row(
                     Modifier.fillMaxSize(), Arrangement.spacedBy(16.dp), Alignment.CenterVertically
                 ) {

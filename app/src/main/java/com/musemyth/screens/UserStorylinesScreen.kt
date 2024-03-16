@@ -48,14 +48,17 @@ import com.musemyth.components.Header
 import com.musemyth.model.UserStoryline
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
+import com.musemyth.services.isLoadingStories
 import com.musemyth.services.showModal
+import com.musemyth.services.studentId
+import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarSecondaryColor
 import com.musemyth.utils.HandleFirebaseError
 
-var isLoadingStories by mutableStateOf(false)
 var story by mutableStateOf(emptyList<UserStoryline>())
+var studentStory by mutableStateOf(emptyList<UserStoryline>())
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +76,14 @@ fun UserStorylinesScreen(navController: NavController) {
         HandleFirebaseError(fbError)
     }
 
+    fun storyPathHandle(): List<UserStoryline> {
+        return if (user.accountType == "aluno") {
+            story
+        } else {
+            studentStory
+        }
+    }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -88,16 +99,16 @@ fun UserStorylinesScreen(navController: NavController) {
                     title = "Seus Storylines Salvos",
                     bgColor = secondary,
                     navController = navController,
-                    actionText = story.size.toString().padStart(2, '0') + "/10"
+                    actionText = storyPathHandle().size.toString().padStart(2, '0') + "/10"
                 )
                 if (!isLoadingStories)
                     LazyColumn(
                         contentPadding = PaddingValues(
                             top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if (story.size < 10) 0.dp else 16.dp
+                            bottom = if (storyPathHandle().size < 10) 0.dp else 16.dp
                         ),
                         content = {
-                            itemsIndexed(story) { index, storyH ->
+                            itemsIndexed(storyPathHandle()) { index, storyH ->
                                 val isEven = index % 2 == 0
                                 val fakeIndex = index + 1
                                 Box(
@@ -147,11 +158,20 @@ fun UserStorylinesScreen(navController: NavController) {
                                                 trackColor = Color.White
                                             )
                                         IconButton(onClick = {
-                                            contentServices.deleteStoryline(
-                                                storyH.id!!,
-                                                scope,
-                                                snackbarHostState
-                                            )
+                                            if (user.accountType == "aluno") {
+                                                contentServices.deleteStoryline(
+                                                    storyH.id!!,
+                                                    scope,
+                                                    snackbarHostState
+                                                )
+                                            } else {
+                                                contentServices.deleteStudentStoryline(
+                                                    storyH.id!!,
+                                                    studentId,
+                                                    scope,
+                                                    snackbarHostState,
+                                                )
+                                            }
                                         }) {
                                             Icon(
                                                 Icons.Rounded.DeleteForever,
@@ -171,7 +191,7 @@ fun UserStorylinesScreen(navController: NavController) {
 
 
 
-            if (story.size < 10)
+            if (storyPathHandle().size < 10 && user.accountType == "aluno")
                 Button(
                     onClick = {
                         navController.navigate("preGenStory") {
