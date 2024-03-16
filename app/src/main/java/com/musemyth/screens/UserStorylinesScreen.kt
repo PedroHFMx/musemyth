@@ -17,7 +17,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.DeleteForever
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -105,7 +105,8 @@ fun UserStorylinesScreen(navController: NavController) {
                                         .padding(bottom = 10.dp)
                                         .fillMaxWidth()
                                         .background(
-                                            if (isEven) secondary else Color(0xFFC05AAA),
+                                            if (isEven) secondary
+                                            else Color(0xFFC05AAA),
                                             RoundedCornerShape(10.dp)
                                         )
                                         .clip(RoundedCornerShape(10.dp))
@@ -153,7 +154,7 @@ fun UserStorylinesScreen(navController: NavController) {
                                             )
                                         }) {
                                             Icon(
-                                                Icons.Rounded.Delete,
+                                                Icons.Rounded.DeleteForever,
                                                 "delete storyline",
                                                 tint = Color.White
                                             )

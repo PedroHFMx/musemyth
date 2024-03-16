@@ -26,7 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,18 +38,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
 import com.musemyth.ui.theme.Poppins
-import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
 
-var storyIndex by mutableStateOf(0)
+var storyIndex by mutableIntStateOf(0)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun LookStorylineScreen(navController: NavController? = null) {
-    val allGenaratedStory: MutableMap<Any, Any> = mutableMapOf()
     val fakeIndex = storyIndex + 1
+    val isEven = storyIndex % 2 == 0
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(if (isEven) secondary else Color(0xFFC05AAA),)
     Scaffold(topBar = {
         Box(
             Modifier
@@ -78,7 +81,7 @@ fun LookStorylineScreen(navController: NavController? = null) {
                     Modifier
                         .clip(CircleShape)
                         .size(50.dp)
-                        .background(secondary),
+                        .background(if (isEven) secondary else Color(0xFFC05AAA)),
                     Alignment.Center
                 ){
                     Text(
@@ -108,7 +111,7 @@ fun LookStorylineScreen(navController: NavController? = null) {
                         Modifier
                             .clip(CircleShape)
                             .size(55.dp)
-                            .background(secondary),
+                            .background(if (isEven) secondary else Color(0xFFC05AAA)),
                         Alignment.Center
                     ) {
                         Text(
@@ -120,7 +123,7 @@ fun LookStorylineScreen(navController: NavController? = null) {
                     Column(
                         Modifier.fillMaxSize()
                     ) {
-                        Text(text = storyline.key, color = secondary)
+                        Text(text = storyline.key, color = if (isEven) secondary else Color(0xFFC05AAA),)
                         if (storyline.value != "") Text(text = "${storyline.value}")
                         else Divider(Modifier.padding(top = 16.dp))
                     }

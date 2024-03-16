@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.ArrowBackIos
-import androidx.compose.material.icons.rounded.ArrowBackIosNew
 import androidx.compose.material.icons.rounded.CheckBox
 import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.Menu
@@ -34,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.musemyth.R
+import com.musemyth.screens.hasUser
 import com.musemyth.services.isLoading
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
@@ -76,7 +74,13 @@ fun Header(
                 ) {
                     if (!isHome) IconButton(onClick = {
                         if (!isLoading) {
-                            navController?.popBackStack()
+                            if (!navController!!.popBackStack()) {
+                                if (hasUser == false) {
+                                    navController.navigate("login")
+                                } else {
+                                    navController.navigate("home")
+                                }
+                            }
                         }
                     }) {
                         Icon(
@@ -114,10 +118,10 @@ fun Header(
                 Row(
                     Modifier
                         .weight(1f)
-                        .padding(end = if(actionText != null) 16.dp else 0.dp)
+                        .padding(end = if (actionText != null) 16.dp else 0.dp)
                         .fillMaxSize(), Arrangement.End, Alignment.CenterVertically
                 ) {
-                    if(actionText != null){
+                    if (actionText != null) {
                         Text(text = actionText, fontFamily = Poppins, color = Color.White)
                     }
                     if (actionPress != null) {

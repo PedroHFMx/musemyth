@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.musemyth.screens
 
@@ -26,7 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,17 +40,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
-import com.musemyth.ui.theme.secondary
 
-var charIndex by mutableStateOf(0)
+var charIndex by mutableIntStateOf(0)
 
 @Composable
 @Preview
 fun LookCharacterScreen(navController: NavController? = null) {
     val fakeIndex = charIndex + 1
+    val isEven = charIndex % 2 == 0
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(if (isEven) primary else Color(0xFF2C2983))
     Scaffold(topBar = {
         Box(
             Modifier
@@ -77,7 +82,7 @@ fun LookCharacterScreen(navController: NavController? = null) {
                     Modifier
                         .clip(CircleShape)
                         .size(50.dp)
-                        .background(primary),
+                        .background(if (isEven) primary else Color(0xFF2C2983)),
                     Alignment.Center
                 ){
                     Text(
@@ -107,7 +112,7 @@ fun LookCharacterScreen(navController: NavController? = null) {
                         Modifier
                             .clip(CircleShape)
                             .size(55.dp)
-                            .background(primary),
+                            .background(if (isEven) primary else Color(0xFF2C2983)),
                         Alignment.Center
                     ) {
                         Text(
@@ -119,7 +124,7 @@ fun LookCharacterScreen(navController: NavController? = null) {
                     Column(
                         Modifier.fillMaxSize()
                     ) {
-                        Text(text = storyline.key, color = primary)
+                        Text(text = storyline.key, color = if (isEven) primary else Color(0xFF2C2983))
                         if (storyline.value != "") Text(text = "${storyline.value}")
                         else Divider(Modifier.padding(top = 16.dp))
                     }
