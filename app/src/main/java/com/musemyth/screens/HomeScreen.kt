@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -81,7 +82,7 @@ fun HomeScreen(navController: NavController? = null) {
                     Modifier, Alignment.CenterStart
                 ) {
                     ModalDrawerSheet(
-                        Modifier.fillMaxWidth(0.75f)
+                        Modifier.fillMaxWidth(0.82f)
                     ) {
                         if (showModal) {
                             ShowModal(
@@ -97,8 +98,12 @@ fun HomeScreen(navController: NavController? = null) {
                                 confirmBtnTxt = "Sim",
                             )
                         }
-                        Column(Modifier.fillMaxSize().background(Color.White)) {
-                            Surface( contentColor = Color.White, color = Color.Transparent) {
+                        Column(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.White)
+                        ) {
+                            Surface(contentColor = Color.White, color = Color.Transparent) {
                                 Box(
                                     Modifier
                                         .fillMaxWidth()
@@ -128,19 +133,19 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "${user.name}",
                                                 fontFamily = Poppins,
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                             Text(
                                                 text = "${user.email}",
                                                 fontFamily = Poppins,
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                             Text(
                                                 text = "${user.accountType}",
                                                 fontFamily = Poppins,
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -149,7 +154,12 @@ fun HomeScreen(navController: NavController? = null) {
                                 }
                             }
                             Surface {
-                                Column (Modifier.background(Color.White)){
+                                Column(Modifier.background(Color.White)) {
+                                    if (user.accountType == "aluno") Spacer(
+                                        modifier = Modifier.padding(
+                                            top = 10.dp
+                                        )
+                                    )
                                     if (user.accountType == "aluno") Card(
                                         Modifier
                                             .fillMaxWidth()
@@ -182,7 +192,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "Storylines Salvos",
                                                 fontFamily = Poppins,
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -218,14 +228,14 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "Personagens Salvos",
                                                 fontFamily = Poppins,
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
                                     }
                                     if (user.accountType == "professor") Spacer(
                                         modifier = Modifier.padding(
-                                            top = 16.dp
+                                            top = 10.dp
                                         )
                                     )
                                     if (user.accountType == "aluno") Divider(Modifier.padding(16.dp))
@@ -250,7 +260,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             )
                                             Text(
                                                 text = "Explicação Sobre Storylines",
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontFamily = Poppins,
                                                 fontWeight = FontWeight.Normal
                                             )
@@ -279,7 +289,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "Sair da Conta",
                                                 fontFamily = Poppins,
-                                                fontSize = 14.sp,
+                                                fontSize = 16.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -300,59 +310,65 @@ fun HomeScreen(navController: NavController? = null) {
 
                 Header(isHome = true, drawerState = drawerState)
 
-                if (user.accountType == "aluno") {
-                    Column(Modifier.padding(0.dp), Arrangement.spacedBy(0.dp)) {
+                if (!isLoadingUser) {
+                    if (user.accountType == "aluno") {
+                        Column(Modifier.padding(0.dp), Arrangement.spacedBy(0.dp)) {
 
-                        Button(
-                            onClick = { navController!!.navigate("preGenStory") },
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize(),
-                            shape = RoundedCornerShape(0.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = secondary)
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(20.dp)
+                            Button(
+                                onClick = { navController!!.navigate("preGenStory") },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxSize(),
+                                shape = RoundedCornerShape(0.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = secondary)
                             ) {
-                                Image(
-                                    modifier = Modifier.size(170.dp),
-                                    painter = painterResource(id = R.drawable.storyline_generate),
-                                    contentDescription = "",
-                                )
-                                Text(
-                                    text = "Gerar Storyline",
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                                ) {
+                                    Image(
+                                        modifier = Modifier.size(170.dp),
+                                        painter = painterResource(id = R.drawable.storyline_generate),
+                                        contentDescription = "",
+                                    )
+                                    Text(
+                                        text = "Gerar Storyline",
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                            Button(
+                                onClick = { navController!!.navigate("preGenChar") },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxSize(),
+                                shape = RoundedCornerShape(0.dp)
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                                ) {
+                                    Image(
+                                        modifier = Modifier.size(170.dp),
+                                        painter = painterResource(id = R.drawable.character_generate),
+                                        contentDescription = "",
+                                    )
+                                    Text(
+                                        text = "Gerar Personagem",
+                                        fontSize = 22.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
                             }
                         }
-                        Button(
-                            onClick = { navController!!.navigate("preGenChar") },
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize(),
-                            shape = RoundedCornerShape(0.dp)
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(20.dp)
-                            ) {
-                                Image(
-                                    modifier = Modifier.size(170.dp),
-                                    painter = painterResource(id = R.drawable.character_generate),
-                                    contentDescription = "",
-                                )
-                                Text(
-                                    text = "Gerar Personagem",
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        }
+                    } else {
+                        ProfessorHomeScreen(navController = navController!!)
                     }
                 } else {
-                    ProfessorHomeScreen(navController = navController!!)
+                    Box(Modifier.fillMaxSize(), Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
                 }
             }
         }

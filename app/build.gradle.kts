@@ -13,7 +13,7 @@ android {
         minSdk = 27
         targetSdk = 33
         versionCode = 1
-        versionName = "0.0.1"
+        versionName = "0.9.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -61,7 +61,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation ("androidx.compose.material:material-icons-extended:1.6.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.6.3")
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation ("com.google.firebase:firebase-firestore-ktx")

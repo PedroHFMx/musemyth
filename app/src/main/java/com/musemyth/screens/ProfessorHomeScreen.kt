@@ -6,9 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.areSystemBarsVisible
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -61,7 +63,7 @@ import com.musemyth.ui.theme.tertiary
 var isLoadingStudents by mutableStateOf(false)
 var students by mutableStateOf(emptyList<Student>())
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ProfessorHomeScreen(navController: NavController) {
     val bottomSheetState = remember { mutableStateOf(false) }
@@ -144,11 +146,13 @@ fun ProfessorHomeScreen(navController: NavController) {
                                 Text(text = "Personagens", fontSize = 14.sp)
                             }
                         }
+                        if(WindowInsets.areSystemBarsVisible){
                         Spacer(
                             Modifier.windowInsetsBottomHeight(
                                 WindowInsets.systemBars
                             )
                         )
+                        }
                     }
                 }
             }
@@ -173,7 +177,7 @@ fun ProfessorHomeScreen(navController: NavController) {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
-                Arrangement.spacedBy(16.dp)
+                Arrangement.spacedBy(10.dp)
             ) {
                 students.forEachIndexed { index, student ->
                     val nameSplit = student.name!!.split(" ")
@@ -216,8 +220,8 @@ fun ProfessorHomeScreen(navController: NavController) {
                                     modifier = Modifier.weight(1f),
                                     text = "${student.name}",
                                     fontFamily = Poppins,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Normal,
                                     color = Color.Black
                                 )
 

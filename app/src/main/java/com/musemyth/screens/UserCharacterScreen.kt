@@ -21,10 +21,10 @@ import androidx.compose.material.icons.rounded.DeleteForever
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -56,6 +56,7 @@ import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarColor
+import com.musemyth.ui.theme.tertiary
 import com.musemyth.utils.HandleFirebaseError
 
 var char by mutableStateOf(emptyList<UserChar>())
@@ -94,8 +95,9 @@ fun UserCharactersScreen(navController: NavController) {
             Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .background(primary)
         ) {
-            Column(Modifier.weight(1f)) {
+            Column(Modifier.weight(1f).background(tertiary)) {
                 Header(
                     title = "Seus Personagens Salvos",
                     bgColor = primary,
@@ -106,7 +108,7 @@ fun UserCharactersScreen(navController: NavController) {
                     LazyColumn(
                         contentPadding = PaddingValues(
                             top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if (charPathHandle().size < 10) 0.dp else 16.dp
+                            bottom = if (charPathHandle().size < 10) 10.dp else 16.dp
                         ),
                         content = {
                             itemsIndexed(charPathHandle()) { index, charH ->
@@ -117,7 +119,7 @@ fun UserCharactersScreen(navController: NavController) {
                                         .padding(bottom = 10.dp)
                                         .fillMaxWidth()
                                         .background(
-                                            if (isEven) primary else Color(0xFF2C2983),
+                                            Color.White,
                                             RoundedCornerShape(10.dp)
                                         )
                                         .clip(RoundedCornerShape(10.dp))
@@ -136,11 +138,11 @@ fun UserCharactersScreen(navController: NavController) {
                                             Modifier
                                                 .size(50.dp)
                                                 .clip(CircleShape)
-                                                .background(Color.White), Alignment.Center
+                                                .background(if (isEven) primary else Color(0xFF2C2983)), Alignment.Center
                                         ) {
                                             Text(
                                                 text = fakeIndex.toString().padStart(2, '0'),
-                                                fontFamily = Poppins, fontSize = 14.sp
+                                                fontFamily = Poppins, fontSize = 14.sp, color = Color.White
                                             )
                                         }
                                         if (charH.generatedChar?.getValue("Nome") != "")
@@ -148,14 +150,12 @@ fun UserCharactersScreen(navController: NavController) {
                                                 modifier = Modifier.weight(1f),
                                                 text = "${charH.generatedChar?.getValue("Nome")}",
                                                 fontFamily = Poppins, fontSize = 14.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Color.White
+                                                fontWeight = FontWeight.Medium,
+                                                color = Color.Black
                                             )
                                         if (charH.generatedChar?.getValue("Nome") == "")
-                                            LinearProgressIndicator(
+                                            Divider(
                                                 modifier = Modifier.weight(1f),
-                                                progress = 0f,
-                                                trackColor = Color.White
                                             )
                                         IconButton(onClick = {
                                             if(user.accountType == "aluno"){
@@ -176,7 +176,7 @@ fun UserCharactersScreen(navController: NavController) {
                                             Icon(
                                                 Icons.Rounded.DeleteForever,
                                                 "delete character",
-                                                tint = Color.White
+                                                tint = if (isEven) primary else Color(0xFF2C2983)
                                             )
                                         }
                                     }
@@ -201,9 +201,9 @@ fun UserCharactersScreen(navController: NavController) {
                         }
                     },
                     Modifier
-                        .padding(16.dp)
+                        .padding(0.dp)
                         .fillMaxWidth()
-                        .height(50.dp),
+                        .height(70.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = primary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
