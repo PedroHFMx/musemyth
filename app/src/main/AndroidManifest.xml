@@ -12,16 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MusemythTheme"
         tools:targetApi="31">
+        <meta-data
+            android:name="asset_statements"
+            android:resource="@string/asset_statements" />
         <activity
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.MusemythTheme">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MusemythTheme"
+            android:windowSoftInputMode="adjustResize">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" />
+                <data android:host="musemythapp.com" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:host="musemythapp.com" />
             </intent-filter>
         </activity>
     </application>

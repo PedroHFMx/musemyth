@@ -114,7 +114,7 @@ fun PreGenCharScreen(navController: NavController? = null) {
                                     Box(
                                         Modifier
                                             .clip(CircleShape)
-                                            .size(55.dp)
+                                            .size(56.dp)
                                             .background(primary),
                                         Alignment.Center
                                     ) {

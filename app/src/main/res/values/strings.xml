@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Musemyth</string>
+    <string name="asset_statements" translatable="false">[{ \"include\": \"https://musemythapp.com/.well-known/assetlinks.json\" }]</string>
 </resources>

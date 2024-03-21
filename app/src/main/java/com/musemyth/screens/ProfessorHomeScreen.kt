@@ -32,7 +32,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -62,12 +61,12 @@ import com.musemyth.ui.theme.tertiary
 
 var isLoadingStudents by mutableStateOf(false)
 var students by mutableStateOf(emptyList<Student>())
+var studentName by mutableStateOf("")
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ProfessorHomeScreen(navController: NavController) {
     val bottomSheetState = remember { mutableStateOf(false) }
-    val studentName = remember { mutableStateOf("") }
 
     if (bottomSheetState.value) {
         Dialog(
@@ -84,7 +83,7 @@ fun ProfessorHomeScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth(),
                     elevation = CardDefaults.elevatedCardElevation(2.dp),
-                    shape = ShapeDefaults.Large,
+                    shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                 ) {
                     Column(
                         Modifier
@@ -97,7 +96,7 @@ fun ProfessorHomeScreen(navController: NavController) {
                         Row(Modifier.fillMaxWidth()) {
                             Box(Modifier.weight(1f))
                             Text(
-                                text = "Escolha quais gerações de\n${studentName.value} quer ver:",
+                                text = "Escolha quais gerações de\n${studentName} quer ver:",
                                 textAlign = TextAlign.Center
                             )
                             IconButton({ bottomSheetState.value = false }, Modifier.weight(1f)) {
@@ -146,12 +145,12 @@ fun ProfessorHomeScreen(navController: NavController) {
                                 Text(text = "Personagens", fontSize = 14.sp)
                             }
                         }
-                        if(WindowInsets.areSystemBarsVisible){
-                        Spacer(
-                            Modifier.windowInsetsBottomHeight(
-                                WindowInsets.systemBars
+                        if (WindowInsets.areSystemBarsVisible) {
+                            Spacer(
+                                Modifier.windowInsetsBottomHeight(
+                                    WindowInsets.systemBars
+                                )
                             )
-                        )
                         }
                     }
                 }
@@ -177,12 +176,13 @@ fun ProfessorHomeScreen(navController: NavController) {
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
                     .padding(bottom = 16.dp, start = 16.dp, end = 16.dp),
-                Arrangement.spacedBy(10.dp)
+                if(students.isNotEmpty()) Arrangement.spacedBy(10.dp) else Arrangement.Center,
+                Alignment.CenterHorizontally
             ) {
-                students.forEachIndexed { index, student ->
-                    val nameSplit = student.name!!.split(" ")
-                    val isEven = index % 2 == 0
-                    if (student.accountType == "aluno")
+                if (students.isNotEmpty()) {
+                    students.forEachIndexed { index, student ->
+                        val nameSplit = student.name!!.split(" ")
+                        val isEven = index % 2 == 0
                         Box(
                             Modifier
                                 .fillMaxWidth()
@@ -192,7 +192,7 @@ fun ProfessorHomeScreen(navController: NavController) {
                                 .clip(RoundedCornerShape(10.dp))
                                 .clickable {
                                     studentId = student.id!!
-                                    studentName.value = student.name
+                                    studentName = student.name
                                     bottomSheetState.value = true
                                 }) {
                             Row(
@@ -227,6 +227,11 @@ fun ProfessorHomeScreen(navController: NavController) {
 
                             }
                         }
+                    }
+                } else {
+                    Box(Modifier.fillMaxSize(), Alignment.Center){
+                        Text(text = "Nenhum aluno cadastrado!", textAlign = TextAlign.Center)
+                    }
                 }
             }
         } else {

@@ -130,7 +130,7 @@ fun GenerateStorylineScreen(navController: NavController? = null) {
                             ) {
                                 Box(
                                     Modifier
-                                        .size(55.dp)
+                                        .size(56.dp)
                                         .clip(CircleShape)
                                         .background(secondary),
                                     Alignment.Center

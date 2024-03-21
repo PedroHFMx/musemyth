@@ -170,10 +170,10 @@ fun RegisterScreen(navController: NavController? = null) {
                     onNext = { emailFocusRequester.requestFocus() }
                 ),
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Nome", fontSize = 14.sp) },
+                label = { Text(text = "Nome", fontSize = 15.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Person, contentDescription = "") },
                 trailingIcon = {
                     if (name.isNotEmpty()) {
@@ -196,7 +196,7 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             if (nameError) Text(
-                text = "Insira primeiro nome e último nome*", color = errorColor, fontSize = 14.sp
+                text = "Insira primeiro nome e último nome*", color = errorColor, fontSize = 15.sp
             )
             if (nameError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
@@ -209,10 +209,10 @@ fun RegisterScreen(navController: NavController? = null) {
                 enabled = !isLoading,
                 onValueChange = { handleErrors(emailI = it.trim()); email = it },
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Email", fontSize = 14.sp) },
+                label = { Text(text = "Email", fontSize = 15.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = "") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
@@ -240,7 +240,7 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             if (emailError) Text(
-                text = "Insira um email válido*", color = errorColor, fontSize = 14.sp
+                text = "Insira um email válido*", color = errorColor, fontSize = 15.sp
             )
             if (emailError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
@@ -253,10 +253,10 @@ fun RegisterScreen(navController: NavController? = null) {
                 enabled = !isLoading,
                 onValueChange = { handleErrors(passwordI = it); password = it },
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Senha", fontSize = 14.sp) },
+                label = { Text(text = "Senha", fontSize = 15.sp) },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
@@ -287,7 +287,7 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             if (passwordError) Text(
-                text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 14.sp
+                text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 15.sp
             )
             if (passwordError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
@@ -305,10 +305,10 @@ fun RegisterScreen(navController: NavController? = null) {
                     ); confirmPassword = it
                 },
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Confirmar Senha", fontSize = 14.sp) },
+                label = { Text(text = "Confirmar Senha", fontSize = 15.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Password),
@@ -342,7 +342,7 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             if (confirmPasswordError) Spacer(modifier = Modifier.padding(5.dp))
             if (confirmPasswordError) Text(
-                text = "As senhas devem ser iguais*", color = errorColor, fontSize = 14.sp
+                text = "As senhas devem ser iguais*", color = errorColor, fontSize = 15.sp
             )
             Spacer(modifier = Modifier.padding(10.dp))
             Button(
@@ -366,7 +366,7 @@ fun RegisterScreen(navController: NavController? = null) {
                         name,
                     ); handleRegisterUser()
                 }) {
-                if (!isLoading) Text(text = "Cadastrar", fontSize = 14.sp) else {
+                if (!isLoading) Text(text = "Cadastrar", fontSize = 15.sp) else {
                     CircularProgressIndicator(color = Color.White)
                 }
             }

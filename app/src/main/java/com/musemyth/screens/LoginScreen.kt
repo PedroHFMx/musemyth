@@ -131,7 +131,7 @@ fun LoginScreen(navController: NavController? = null) {
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
             textStyle = TextStyle(
-                fontSize = 14.sp,
+                fontSize = 15.sp,
                 fontFamily = Poppins
             ),
             shape = RoundedCornerShape(10.dp),
@@ -144,7 +144,7 @@ fun LoginScreen(navController: NavController? = null) {
                     focusRequester.requestFocus()
                 }
             ),
-            label = { Text(text = "Email", fontSize = 14.sp) },
+            label = { Text(text = "Email", fontSize = 15.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Email, contentDescription = "email"
@@ -172,7 +172,7 @@ fun LoginScreen(navController: NavController? = null) {
         )
         if (emailError) Spacer(modifier = Modifier.padding(3.dp))
         if (emailError) Text(
-            text = "Insira um email válido*", color = errorColor, fontSize = 14.sp
+            text = "Insira um email válido*", color = errorColor, fontSize = 15.sp
         )
         Spacer(modifier = Modifier.padding(3.dp))
         TextField(
@@ -184,7 +184,7 @@ fun LoginScreen(navController: NavController? = null) {
             enabled = !isLoading,
             shape = RoundedCornerShape(10.dp),
             textStyle = TextStyle(
-                fontSize = 14.sp,
+                fontSize = 15.sp,
                 fontFamily = Poppins
             ),
             value = password,
@@ -192,7 +192,7 @@ fun LoginScreen(navController: NavController? = null) {
             visualTransformation =
             if (showPassword) VisualTransformation.None
             else PasswordVisualTransformation(),
-            label = { Text(text = "Senha", fontSize = 14.sp) },
+            label = { Text(text = "Senha", fontSize = 15.sp) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -227,7 +227,7 @@ fun LoginScreen(navController: NavController? = null) {
         )
         if (passwordError) Spacer(modifier = Modifier.padding(3.dp))
         if (passwordError) Text(
-            text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 14.sp
+            text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 15.sp
         )
         Spacer(modifier = Modifier.padding(4.dp))
         TextButton(modifier = Modifier.align(Alignment.End), enabled = !isLoading, onClick = {
@@ -236,7 +236,7 @@ fun LoginScreen(navController: NavController? = null) {
             Text(
                 text = "Esqueci minha senha",
                 color = Color.Black,
-                fontSize = 14.sp
+                fontSize = 15.sp
             )
         }
         Spacer(modifier = Modifier.padding(4.dp))
@@ -253,7 +253,7 @@ fun LoginScreen(navController: NavController? = null) {
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
             onClick = { handleErrors(email, password); handleLogin() }) {
-            if (!isLoading) Text(text = "Entrar", fontSize = 14.sp) else {
+            if (!isLoading) Text(text = "Entrar", fontSize = 15.sp) else {
                 CircularProgressIndicator(color = Color.White)
             }
         }
@@ -264,10 +264,10 @@ fun LoginScreen(navController: NavController? = null) {
             enabled = !isLoading
         ) {
             Text(text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = Color.Black, fontSize = 14.sp)) {
+                withStyle(style = SpanStyle(color = Color.Black, fontSize = 15.sp)) {
                     append("Não tem conta? ")
                 }
-                withStyle(style = SpanStyle(color = primary, fontSize = 14.sp)) {
+                withStyle(style = SpanStyle(color = primary, fontSize = 15.sp)) {
                     append("Cadastrar")
                 }
             })

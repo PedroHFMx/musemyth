@@ -133,19 +133,19 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "${user.name}",
                                                 fontFamily = Poppins,
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                             Text(
                                                 text = "${user.email}",
                                                 fontFamily = Poppins,
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                             Text(
                                                 text = "${user.accountType}",
                                                 fontFamily = Poppins,
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -192,7 +192,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "Storylines Salvos",
                                                 fontFamily = Poppins,
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -228,7 +228,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "Personagens Salvos",
                                                 fontFamily = Poppins,
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -260,7 +260,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             )
                                             Text(
                                                 text = "Explicação Sobre Storylines",
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontFamily = Poppins,
                                                 fontWeight = FontWeight.Normal
                                             )
@@ -289,7 +289,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             Text(
                                                 text = "Sair da Conta",
                                                 fontFamily = Poppins,
-                                                fontSize = 16.sp,
+                                                fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
                                             )
                                         }
@@ -339,7 +339,10 @@ fun HomeScreen(navController: NavController? = null) {
                                 }
                             }
                             Button(
-                                onClick = { navController!!.navigate("preGenChar") },
+                                onClick = {
+                                    //navController!!.navigate("preGenChar")
+                                          navController!!.navigate("test")
+                                },
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxSize(),

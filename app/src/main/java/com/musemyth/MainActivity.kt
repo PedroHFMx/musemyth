@@ -1,5 +1,6 @@
 package com.musemyth
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,9 +12,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.google.firebase.auth.FirebaseAuth
 import com.musemyth.screens.GenerateCharacterScreen
 import com.musemyth.screens.GenerateStorylineScreen
@@ -26,6 +30,7 @@ import com.musemyth.screens.PreGenCharScreen
 import com.musemyth.screens.PreGenStoryScreen
 import com.musemyth.screens.RecoverPasswordScreen
 import com.musemyth.screens.RegisterScreen
+import com.musemyth.screens.TestScreen
 import com.musemyth.screens.UserCharactersScreen
 import com.musemyth.screens.UserStorylinesScreen
 import com.musemyth.screens.hasUser
@@ -72,7 +77,19 @@ class MainActivity : ComponentActivity() {
                         composable("genChar") { GenerateCharacterScreen(navController) }
                         composable("genStory") { GenerateStorylineScreen(navController) }
                         composable("lookStory") { LookStorylineScreen(navController) }
-                        composable("lookChar") { LookCharacterScreen(navController) }
+                        composable("lookChar") { entry ->
+                            val charId = entry.arguments?.getString("id")
+                            LookCharacterScreen(navController, charId)
+                        }
+                        composable("test/{id}", deepLinks = listOf(navDeepLink {
+                            uriPattern = "https://musemythapp.com/{id}"
+                        }), arguments = listOf(navArgument("id") {
+                            type = NavType.IntType
+                            defaultValue = 1
+                        })) { entry ->
+                            val charId = entry.arguments?.getInt("id")
+                            TestScreen(navController, charId)
+                        }
                     }
                 }
             }

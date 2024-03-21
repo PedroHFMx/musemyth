@@ -99,7 +99,7 @@ fun UserStorylinesScreen(navController: NavController) {
         ) {
             Column(Modifier.weight(1f).background(tertiary)) {
                 Header(
-                    title = "Seus Storylines Salvos",
+                    title = if (user.accountType == "aluno") "Seus Storylines Salvos" else "Storylines salvos de\n${studentName}",
                     bgColor = secondary,
                     navController = navController,
                     actionText = storyPathHandle().size.toString().padStart(2, '0') + "/10"
@@ -147,14 +147,14 @@ fun UserStorylinesScreen(navController: NavController) {
                                         ) {
                                             Text(
                                                 text = fakeIndex.toString().padStart(2, '0'),
-                                                fontFamily = Poppins, fontSize = 14.sp, color = Color.White
+                                                fontFamily = Poppins, fontSize = 15.sp, color = Color.White
                                             )
                                         }
                                         if (storyH.generatedStory?.getValue("Mundo Comum") != "")
                                             Text(
                                                 modifier = Modifier.weight(1f),
                                                 text = "${storyH.generatedStory?.getValue("Mundo Comum")}",
-                                                fontFamily = Poppins, fontSize = 14.sp,
+                                                fontFamily = Poppins, fontSize = 15.sp,
                                                 fontWeight = FontWeight.Medium,
                                                 color = Color.Black
                                             )

@@ -30,6 +30,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ import com.musemyth.components.Header
 import com.musemyth.model.UserChar
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
+import com.musemyth.services.fetchStudentCharacters
 import com.musemyth.services.isLoadingCharacters
 import com.musemyth.services.showModal
 import com.musemyth.services.studentId
@@ -65,7 +67,6 @@ var studentChar by mutableStateOf(emptyList<UserChar>())
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserCharactersScreen(navController: NavController) {
-
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(statusBarColor)
 
@@ -100,100 +101,103 @@ fun UserCharactersScreen(navController: NavController) {
             Column(
                 Modifier
                     .weight(1f)
-                    .background(tertiary)) {
+                    .background(tertiary)
+            ) {
                 Header(
-                    title = "Seus Personagens Salvos",
+                    title = if (user.accountType == "aluno") "Seus Personagens Salvos" else "Personagens salvos de\n${studentName}",
                     bgColor = primary,
                     navController = navController,
                     actionText = charPathHandle().size.toString().padStart(2, '0') + "/10"
                 )
                 if (!isLoadingCharacters)
-                    if(charPathHandle().isEmpty())
-                        Box(Modifier.fillMaxSize(), Alignment.Center){
+                    if (charPathHandle().isEmpty())
+                        Box(Modifier.fillMaxSize(), Alignment.Center) {
                             Text(text = "Nenhum Personagem salvo!")
                         }
-                    LazyColumn(
-                        contentPadding = PaddingValues(
-                            top = 16.dp, end = 16.dp, start = 16.dp,
-                            bottom = if (charPathHandle().size < 10) 10.dp else 16.dp
-                        ),
-                        content = {
-                            itemsIndexed(charPathHandle()) { index, charH ->
-                                val isEven = index % 2 == 0
-                                val fakeIndex = index + 1
-                                Box(
+                LazyColumn(
+                    contentPadding = PaddingValues(
+                        top = 16.dp, end = 16.dp, start = 16.dp,
+                        bottom = if (charPathHandle().size < 10) 10.dp else 16.dp
+                    ),
+                    content = {
+                        itemsIndexed(charPathHandle()) { index, charH ->
+                            val isEven = index % 2 == 0
+                            val fakeIndex = index + 1
+                            Box(
+                                Modifier
+                                    .padding(bottom = 10.dp)
+                                    .fillMaxWidth()
+                                    .background(
+                                        Color.White,
+                                        RoundedCornerShape(10.dp)
+                                    )
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .clickable {
+                                        charIndex = index; navController.navigate("lookChar")
+                                    }
+                            ) {
+                                Row(
                                     Modifier
-                                        .padding(bottom = 10.dp)
-                                        .fillMaxWidth()
-                                        .background(
-                                            Color.White,
-                                            RoundedCornerShape(10.dp)
-                                        )
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .clickable {
-                                            charIndex = index; navController.navigate("lookChar")
-                                        }
+                                        .fillMaxSize()
+                                        .padding(16.dp),
+                                    Arrangement.spacedBy(16.dp),
+                                    Alignment.CenterVertically
                                 ) {
-                                    Row(
+                                    Box(
                                         Modifier
-                                            .fillMaxSize()
-                                            .padding(16.dp),
-                                        Arrangement.spacedBy(16.dp),
-                                        Alignment.CenterVertically
+                                            .size(40.dp)
+                                            .clip(CircleShape)
+                                            .background(
+                                                if (isEven) primary else Color(
+                                                    0xFF2C2983
+                                                )
+                                            ), Alignment.Center
                                     ) {
-                                        Box(
-                                            Modifier
-                                                .size(40.dp)
-                                                .clip(CircleShape)
-                                                .background(
-                                                    if (isEven) primary else Color(
-                                                        0xFF2C2983
-                                                    )
-                                                ), Alignment.Center
-                                        ) {
-                                            Text(
-                                                text = fakeIndex.toString().padStart(2, '0'),
-                                                fontFamily = Poppins, fontSize = 14.sp, color = Color.White
-                                            )
-                                        }
-                                        if (charH.generatedChar?.getValue("Nome") != "")
-                                            Text(
-                                                modifier = Modifier.weight(1f),
-                                                text = "${charH.generatedChar?.getValue("Nome")}",
-                                                fontFamily = Poppins, fontSize = 14.sp,
-                                                fontWeight = FontWeight.Medium,
-                                                color = Color.Black
-                                            )
-                                        if (charH.generatedChar?.getValue("Nome") == "")
-                                            Divider(
-                                                modifier = Modifier.weight(1f),
-                                            )
-                                        IconButton(onClick = {
-                                            if(user.accountType == "aluno"){
+                                        Text(
+                                            text = fakeIndex.toString().padStart(2, '0'),
+                                            fontFamily = Poppins,
+                                            fontSize = 15.sp,
+                                            color = Color.White
+                                        )
+                                    }
+                                    if (charH.generatedChar?.getValue("Nome") != "")
+                                        Text(
+                                            modifier = Modifier.weight(1f),
+                                            text = "${charH.generatedChar?.getValue("Nome")}",
+                                            fontFamily = Poppins, fontSize = 15.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = Color.Black
+                                        )
+                                    if (charH.generatedChar?.getValue("Nome") == "")
+                                        Divider(
+                                            modifier = Modifier.weight(1f),
+                                        )
+                                    IconButton(onClick = {
+                                        if (user.accountType == "aluno") {
                                             contentServices.deleteCharacter(
                                                 charH.id!!,
                                                 scope,
                                                 snackbarHostState
                                             )
-                                            } else {
-                                                contentServices.deleteStudentCharacter(
-                                                    charH.id!!,
-                                                    studentId,
-                                                    scope,
-                                                    snackbarHostState,
-                                                )
-                                            }
-                                        }) {
-                                            Icon(
-                                                Icons.Rounded.DeleteForever,
-                                                "delete character",
-                                                tint = if (isEven) primary else Color(0xFF2C2983)
+                                        } else {
+                                            contentServices.deleteStudentCharacter(
+                                                charH.id!!,
+                                                studentId,
+                                                scope,
+                                                snackbarHostState,
                                             )
                                         }
+                                    }) {
+                                        Icon(
+                                            Icons.Rounded.DeleteForever,
+                                            "delete character",
+                                            tint = if (isEven) primary else Color(0xFF2C2983)
+                                        )
                                     }
                                 }
                             }
-                        })
+                        }
+                    })
                 if (isLoadingCharacters)
                     Box(modifier = Modifier.fillMaxSize(), Alignment.Center) {
                         CircularProgressIndicator(color = secondary)
@@ -218,7 +222,10 @@ fun UserCharactersScreen(navController: NavController) {
                     colors = ButtonDefaults.buttonColors(containerColor = primary),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = if(charPathHandle().isEmpty()) "Gerar Personagens" else "Gerar Mais Personagens", fontSize = 15.sp)
+                    Text(
+                        text = if (charPathHandle().isEmpty()) "Gerar Personagens" else "Gerar Mais Personagens",
+                        fontSize = 15.sp
+                    )
                 }
         }
     }
