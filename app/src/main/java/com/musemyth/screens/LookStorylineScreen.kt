@@ -43,18 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
 import com.musemyth.model.UserStoryline
+import com.musemyth.services.iconByKey
 import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
-import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
-import com.musemyth.ui.theme.tertiary
-import java.io.File
-import java.io.FileOutputStream
 
 var storyIndex by mutableIntStateOf(0)
 
@@ -83,22 +79,23 @@ fun LookStorylineScreen(navController: NavController? = null) {
         generatedStory.putAll(storyH)
     }
 
-    fun shareBitmap(context: Context, text: String) {
-        val file = File(context.cacheDir, "screenshot.png")
-        val fileOutputStream = FileOutputStream(file)
-        fileOutputStream.flush()
-        fileOutputStream.close()
 
-        val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+    val generatedString = StringBuilder()
+    generatedStory.entries.forEachIndexed { index, entry ->
+        generatedString.append("${entry.key}: ${entry.value}")
+        if (index < generatedStory.size - 1) {
+            generatedString.append("\n\n")
+        }
+    }
 
+    fun shareStoryline(context: Context, text: String) {
         context.startActivity(
             Intent.createChooser(
                 Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, text)
                     type = "text/plain"
-                },
-                "Compartilhar Storyline"
+                }, "Compartilhar Storyline"
             )
         )
     }
@@ -124,34 +121,31 @@ fun LookStorylineScreen(navController: NavController? = null) {
                     tint = Color.White
                 )
             }
-            if (user.accountType == "professor")
+            if (user.accountType == "professor") Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(16.dp), Alignment.BottomCenter
+            ) {
                 Box(
                     Modifier
-                        .fillMaxSize()
-                        .padding(16.dp), Alignment.BottomCenter
+                        .clip(CircleShape)
+                        .background(if (isEven) secondary else Color(0xFFC05AAA)), Alignment.Center
                 ) {
-                    Box(
-                        Modifier
-                            .clip(CircleShape)
-                            .background(if (isEven) secondary else Color(0xFFC05AAA)),
-                        Alignment.Center
-                    ) {
-                        Text(
-                            text = "Gerado por: $studentName",
-                            modifier = Modifier.padding(20.dp, 12.dp),
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
-                    }
+                    Text(
+                        text = "Gerado por: $studentName",
+                        modifier = Modifier.padding(20.dp, 12.dp),
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
                 }
+            }
             Box(
                 Modifier
                     .fillMaxSize()
                     .padding(16.dp), Alignment.TopEnd
             ) {
                 Row(
-                    Modifier,
-                    Arrangement.spacedBy(if (user.accountType == "aluno") 0.dp else 10.dp)
+                    Modifier, Arrangement.spacedBy(if (user.accountType == "aluno") 0.dp else 10.dp)
                 ) {
                     Box(
                         Modifier
@@ -168,29 +162,23 @@ fun LookStorylineScreen(navController: NavController? = null) {
                             color = Color.White
                         )
                     }
-                    if (user.accountType == "professor")
-                        Box(
-                            Modifier
-                                .clip(CircleShape)
-                                .size(50.dp)
-                                .clickable {
-                                    shareBitmap(
-                                        context, "Storyline de $studentName: " +
-                                                generatedStory
-                                                    .toString()
-                                                    .replace("{", "")
-                                                    .replace("}", "")
-                                                    .replace("=", ": ")
-                                    )
-                                }
-                                .background(if (isEven) secondary else Color(0xFFC05AAA)),
-                            Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Rounded.Share, contentDescription = "share this storyline",
-                                tint = Color.White
-                            )
-                        }
+                    if (user.accountType == "professor") Box(
+                        Modifier
+                            .clip(CircleShape)
+                            .size(50.dp)
+                            .clickable {
+                                shareStoryline(
+                                    context, "Storyline de $studentName:\n\n$generatedString"
+                                )
+                            }
+                            .background(if (isEven) secondary else Color(0xFFC05AAA)),
+                        Alignment.Center) {
+                        Icon(
+                            Icons.Rounded.Share,
+                            contentDescription = "share this storyline",
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }
@@ -214,10 +202,10 @@ fun LookStorylineScreen(navController: NavController? = null) {
                             .background(if (isEven) secondary else Color(0xFFC05AAA)),
                         Alignment.Center
                     ) {
-                        Text(
-                            storyline.key[0] + storyline.key[1].toString().trim().padEnd(
-                                1, storyline.key[2]
-                            ), Modifier.padding(16.dp), color = Color.White, fontSize = 15.sp
+                        Image(
+                            painter = painterResource(id = iconByKey(storyline.key)),
+                            contentDescription = "storyline icon",
+                            Modifier.padding(10.dp)
                         )
                     }
                     Column(

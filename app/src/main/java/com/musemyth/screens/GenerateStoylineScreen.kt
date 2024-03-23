@@ -19,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +42,7 @@ import androidx.navigation.NavController
 import com.musemyth.components.Header
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
+import com.musemyth.services.iconByKey
 import com.musemyth.services.isLoading
 import com.musemyth.services.showModal
 import com.musemyth.services.storylineTables
@@ -117,7 +120,7 @@ fun GenerateStorylineScreen(navController: NavController? = null) {
                     verticalArrangement = Arrangement.spacedBy(30.dp),
                     content = {
                         storylineTables.forEach { item ->
-                            val keysList = item.table!!.keys.first();
+                            val keysList = item.table!!.keys.first()
                             val valuesList: List<*> = randomValuesMap.getValue(keysList)
 
                             storyH = mapOf(keysList to valuesList.first()!!)
@@ -135,14 +138,11 @@ fun GenerateStorylineScreen(navController: NavController? = null) {
                                         .background(secondary),
                                     Alignment.Center
                                 ) {
-                                    Text(
-                                        keysList[0] +
-                                                keysList[1].toString()
-                                                    .trim()
-                                                    .padEnd(1, keysList[2]),
-                                        Modifier.padding(16.dp),
-                                        color = Color.White,
-                                        fontSize = 15.sp
+                                    Icon(
+                                        painter = painterResource(id = iconByKey(item.table.keys.first())),
+                                        contentDescription = "storyline icon",
+                                        Modifier.padding(10.dp),
+                                        tint = Color.White
                                     )
                                 }
                                 Column(Modifier.fillMaxSize()) {

@@ -30,7 +30,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -159,6 +158,7 @@ fun RegisterScreen(navController: NavController? = null) {
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(65.dp)
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = name,
@@ -173,7 +173,7 @@ fun RegisterScreen(navController: NavController? = null) {
                     fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Nome", fontSize = 15.sp) },
+                placeholder = { Text(text = "Nome", fontSize = 15.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Person, contentDescription = "") },
                 trailingIcon = {
                     if (name.isNotEmpty()) {
@@ -196,13 +196,14 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             if (nameError) Text(
-                text = "Insira primeiro nome e último nome*", color = errorColor, fontSize = 15.sp
+                text = "Insira primeiro nome e último nome*", color = errorColor, fontSize = 14.sp
             )
             if (nameError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
                 modifier = Modifier
                     .focusRequester(emailFocusRequester)
                     .fillMaxWidth()
+                    .height(65.dp)
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = email,
@@ -212,7 +213,7 @@ fun RegisterScreen(navController: NavController? = null) {
                     fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Email", fontSize = 15.sp) },
+                placeholder = { Text(text = "Email", fontSize = 15.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Rounded.Email, contentDescription = "") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
@@ -240,13 +241,14 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             if (emailError) Text(
-                text = "Insira um email válido*", color = errorColor, fontSize = 15.sp
+                text = "Insira um email válido*", color = errorColor, fontSize = 14.sp
             )
             if (emailError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
                 modifier = Modifier
                     .focusRequester(passwordFocusRequester)
                     .fillMaxWidth()
+                    .height(65.dp)
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = password,
@@ -256,7 +258,7 @@ fun RegisterScreen(navController: NavController? = null) {
                     fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Senha", fontSize = 15.sp) },
+                placeholder = { Text(text = "Senha", fontSize = 15.sp) },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(
@@ -287,13 +289,14 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             Spacer(modifier = Modifier.padding(5.dp))
             if (passwordError) Text(
-                text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 15.sp
+                text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 14.sp
             )
             if (passwordError) Spacer(modifier = Modifier.padding(10.dp))
             TextField(
                 modifier = Modifier
                     .focusRequester(confirmPasswordFocusRequester)
                     .fillMaxWidth()
+                    .height(65.dp)
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),
                 value = confirmPassword,
@@ -308,7 +311,7 @@ fun RegisterScreen(navController: NavController? = null) {
                     fontSize = 15.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Confirmar Senha", fontSize = 15.sp) },
+                placeholder = { Text(text = "Confirmar Senha", fontSize = 15.sp) },
                 leadingIcon = { Icon(imageVector = Icons.Outlined.Lock, contentDescription = "") },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.None,
                     keyboardType = KeyboardType.Password),
@@ -342,7 +345,7 @@ fun RegisterScreen(navController: NavController? = null) {
             )
             if (confirmPasswordError) Spacer(modifier = Modifier.padding(5.dp))
             if (confirmPasswordError) Text(
-                text = "As senhas devem ser iguais*", color = errorColor, fontSize = 15.sp
+                text = "As senhas devem ser iguais*", color = errorColor, fontSize = 14.sp
             )
             Spacer(modifier = Modifier.padding(10.dp))
             Button(

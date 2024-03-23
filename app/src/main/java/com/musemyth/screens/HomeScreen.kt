@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Article
+import androidx.compose.material.icons.automirrored.rounded.Assignment
 import androidx.compose.material.icons.automirrored.rounded.ExitToApp
+import androidx.compose.material.icons.rounded.Assignment
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
@@ -59,6 +61,7 @@ import com.musemyth.ui.theme.errorColor
 import com.musemyth.ui.theme.primary
 import com.musemyth.ui.theme.secondary
 import com.musemyth.ui.theme.statusBarColor
+import com.musemyth.ui.theme.tertiary
 import kotlinx.coroutines.launch
 
 
@@ -160,7 +163,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             top = 10.dp
                                         )
                                     )
-                                    if (user.accountType == "aluno") Card(
+                                    if (user.accountType == "aluno" && !isLoadingUser) Card(
                                         Modifier
                                             .fillMaxWidth()
                                             .clickable {
@@ -197,7 +200,7 @@ fun HomeScreen(navController: NavController? = null) {
                                             )
                                         }
                                     }
-                                    if (user.accountType == "aluno") Card(
+                                    if (user.accountType == "aluno" && !isLoadingUser) Card(
                                         Modifier
                                             .fillMaxWidth()
                                             .clickable {
@@ -238,11 +241,19 @@ fun HomeScreen(navController: NavController? = null) {
                                             top = 10.dp
                                         )
                                     )
-                                    if (user.accountType == "aluno") Divider(Modifier.padding(16.dp))
+                                    if (user.accountType == "aluno" && !isLoadingUser) Divider(Modifier.padding(16.dp))
                                     Card(
                                         Modifier
                                             .fillMaxWidth()
-                                            .clickable { /* TODO */ },
+                                            .clickable { scope.launch {
+                                                drawerState.apply {
+                                                    close().apply {
+                                                        navController?.navigate(
+                                                            "storyExplain"
+                                                        )
+                                                    }
+                                                }
+                                            } },
                                         colors = CardDefaults.cardColors(
                                             containerColor = Color.Transparent
                                         )
@@ -260,6 +271,41 @@ fun HomeScreen(navController: NavController? = null) {
                                             )
                                             Text(
                                                 text = "Explicação Sobre Storylines",
+                                                fontSize = 15.sp,
+                                                fontFamily = Poppins,
+                                                fontWeight = FontWeight.Normal
+                                            )
+                                        }
+                                    }
+                                    Card(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable { scope.launch {
+                                                drawerState.apply {
+                                                    close().apply {
+                                                        navController?.navigate(
+                                                            "credits"
+                                                        )
+                                                    }
+                                                }
+                                            } },
+                                        colors = CardDefaults.cardColors(
+                                            containerColor = Color.Transparent
+                                        )
+                                    ) {
+                                        Row(
+                                            Modifier.padding(16.dp),
+                                            Arrangement.spacedBy(10.dp),
+                                            Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.AutoMirrored.Rounded.Assignment,
+                                                contentDescription = "account",
+                                                Modifier.size(20.dp),
+                                                tint = Color.Black,
+                                            )
+                                            Text(
+                                                text = "Créditos",
                                                 fontSize = 15.sp,
                                                 fontFamily = Poppins,
                                                 fontWeight = FontWeight.Normal
@@ -327,8 +373,8 @@ fun HomeScreen(navController: NavController? = null) {
                                     verticalArrangement = Arrangement.spacedBy(20.dp)
                                 ) {
                                     Image(
-                                        modifier = Modifier.size(170.dp),
-                                        painter = painterResource(id = R.drawable.storyline_generate),
+                                        modifier = Modifier.size(140.dp),
+                                        painter = painterResource(id = R.drawable.generate_storyline1),
                                         contentDescription = "",
                                     )
                                     Text(
@@ -340,8 +386,7 @@ fun HomeScreen(navController: NavController? = null) {
                             }
                             Button(
                                 onClick = {
-                                    //navController!!.navigate("preGenChar")
-                                          navController!!.navigate("test")
+                                    navController!!.navigate("preGenChar")
                                 },
                                 modifier = Modifier
                                     .weight(1f)
@@ -369,7 +414,7 @@ fun HomeScreen(navController: NavController? = null) {
                         ProfessorHomeScreen(navController = navController!!)
                     }
                 } else {
-                    Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    Box(Modifier.fillMaxSize().background(tertiary), Alignment.Center) {
                         CircularProgressIndicator()
                     }
                 }

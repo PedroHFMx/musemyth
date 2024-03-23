@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.musemyth.R
 import com.musemyth.model.Characters
 import com.musemyth.model.Storylines
 import com.musemyth.model.Student
@@ -192,18 +193,41 @@ fun fetchStudentCharacters(id: String) {
             if (snapshot != null) {
                 val charsList = mutableListOf<UserChar>()
                 for (doc in snapshot.documents) {
-                    val storyline = doc.toObject(UserChar::class.java)
-                    val newStoryline = UserChar(
-                        time = storyline?.time ?: "",
-                        generatedChar = storyline?.generatedChar,
-                        id = storyline?.id ?: ""
+                    val character = doc.toObject(UserChar::class.java)
+                    val newCharacter = UserChar(
+                        time = character?.time ?: "",
+                        generatedChar = charactersSortMapKeys(character?.generatedChar),
+                        id = character?.id ?: ""
                     )
-                    charsList.add(newStoryline)
+                    charsList.add(newCharacter)
                 }
                 studentChar = charsList
                 isLoadingCharacters = false
             }
         }
+}
+
+fun charactersSortMapKeys(generatedChar: Map<String, Any>?): Map<String, Any> {
+    val characterOrder = listOf(
+        "Nome",
+        "Gênero",
+        "Personalidade da Personagem",
+        "Arcanos Menores",
+        "Afinidade Tecnológica",
+        "Nível de Instrução",
+        "Espiritualidade",
+        "Poder Aquisitivo",
+        "Arquétipos-Papéis",
+    )
+    val sortedMap = LinkedHashMap<String, Any>()
+    generatedChar?.let {
+        for (key in characterOrder) {
+            if (it.containsKey(key)) {
+                sortedMap[key] = it[key] ?: ""
+            }
+        }
+    }
+    return sortedMap
 }
 
 fun fetchUserCharacters() {
@@ -214,13 +238,13 @@ fun fetchUserCharacters() {
             if (snapshot != null) {
                 val charsList = mutableListOf<UserChar>()
                 for (doc in snapshot.documents) {
-                    val storyline = doc.toObject(UserChar::class.java)
-                    val newStoryline = UserChar(
-                        time = storyline?.time ?: "",
-                        generatedChar = storyline?.generatedChar,
-                        id = storyline?.id ?: ""
+                    val character = doc.toObject(UserChar::class.java)
+                    val newCharacter = UserChar(
+                        time = character?.time ?: "",
+                        generatedChar = charactersSortMapKeys(character?.generatedChar),
+                        id = character?.id ?: ""
                     )
-                    charsList.add(newStoryline)
+                    charsList.add(newCharacter)
                 }
                 char = charsList
                 isLoadingCharacters = false
@@ -238,8 +262,8 @@ fun fetchStudentStorylines(id: String) {
                     val storyline = doc.toObject(UserStoryline::class.java)
                     val newStoryline = UserStoryline(
                         time = storyline?.time ?: "",
-                        generatedStory = storyline?.generatedStory,
-                        id = storyline?.id ?: ""
+                        generatedStory = storylinesSortMapKeys(storyline?.generatedStory),
+                        id = storyline?.id ?: "",
                     )
                     storylinesList.add(newStoryline)
                 }
@@ -247,6 +271,50 @@ fun fetchStudentStorylines(id: String) {
                 isLoadingStories = false
             }
         }
+}
+
+fun iconByKey(key: String): Int {
+    when (key) {
+        "Mundo Comum" -> return R.drawable.amundo_comum
+        "O Chamado a Aventura" -> return R.drawable.b_chamado_a_aventura
+        "A Recusa ao Chamado" -> return R.drawable.c_recusa_ao_chamado
+        "Encontro Com o Mentor" -> return R.drawable.d_encontro_com_o_mentor
+        "A Travessia do Primeiro Limiar" -> return R.drawable.e_travessia_do_primeiro_limiar
+        "Provas; Aliados e Inimigos" -> return R.drawable.f_provas_aliados_e_inimigos
+        "Aproximação a Caverna Secreta" -> return R.drawable.g_aproximacao_a_carverna_oculta
+        "A Provação" -> return R.drawable.h_provacao
+        "Recompensa" -> return R.drawable.i_recompensa
+        "Caminho de Volta" -> return R.drawable.j_caminho_de_volta
+        "Ressureição" -> return R.drawable.k_ressureicao
+        "Elixir" -> return R.drawable.l_elixir
+    }
+    return R.drawable.ic_launcher_foreground
+}
+
+fun storylinesSortMapKeys(generatedChar: Map<String, Any>?): Map<String, Any> {
+    val storylineOrder = listOf(
+        "Mundo Comum",
+        "O Chamado a Aventura",
+        "A Recusa ao Chamado",
+        "Encontro Com o Mentor",
+        "A Travessia do Primeiro Limiar",
+        "Provas; Aliados e Inimigos",
+        "Aproximação a Caverna Secreta",
+        "A Provação",
+        "Recompensa",
+        "Caminho de Volta",
+        "Ressureição",
+        "Elixir"
+    )
+    val sortedMap = LinkedHashMap<String, Any>()
+    generatedChar?.let {
+        for (key in storylineOrder) {
+            if (it.containsKey(key)) {
+                sortedMap[key] = it[key] ?: ""
+            }
+        }
+    }
+    return sortedMap
 }
 
 fun fetchUserStorylines() {
@@ -260,7 +328,7 @@ fun fetchUserStorylines() {
                     val storyline = doc.toObject(UserStoryline::class.java)
                     val newStoryline = UserStoryline(
                         time = storyline?.time ?: "",
-                        generatedStory = storyline?.generatedStory,
+                        generatedStory = storylinesSortMapKeys(storyline?.generatedStory),
                         id = storyline?.id ?: ""
                     )
                     storylinesList.add(newStoryline)

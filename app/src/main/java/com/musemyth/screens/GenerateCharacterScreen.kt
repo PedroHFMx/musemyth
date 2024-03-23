@@ -52,7 +52,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-@SuppressLint("MutableCollectionMutableState")
+@SuppressLint("MutableCollectionMutableState", "SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
@@ -119,7 +119,7 @@ fun GenerateCharacterScreen(navController: NavController? = null) {
                     verticalArrangement = Arrangement.spacedBy(30.dp),
                     content = {
                         characterTables.forEach { item ->
-                            val keysList = item.table!!.keys.first();
+                            val keysList = item.table!!.keys.first()
                             val valuesList: List<*> = randomValuesMap.getValue(keysList)
 
                             charH = mapOf(keysList to valuesList.first()!!)
@@ -169,6 +169,7 @@ fun GenerateCharacterScreen(navController: NavController? = null) {
             }
 
             Row(Modifier.padding(16.dp), Arrangement.spacedBy(4.dp)) {
+
                 if(char.size < 10)
                 Button(
                     {

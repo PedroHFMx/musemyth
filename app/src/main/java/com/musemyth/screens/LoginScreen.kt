@@ -27,8 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -46,7 +44,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -127,7 +124,7 @@ fun LoginScreen(navController: NavController? = null) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(65.dp)
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
             textStyle = TextStyle(
@@ -144,7 +141,7 @@ fun LoginScreen(navController: NavController? = null) {
                     focusRequester.requestFocus()
                 }
             ),
-            label = { Text(text = "Email", fontSize = 15.sp) },
+            placeholder = { Text(text = "Email", fontSize = 15.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Email, contentDescription = "email"
@@ -172,14 +169,15 @@ fun LoginScreen(navController: NavController? = null) {
         )
         if (emailError) Spacer(modifier = Modifier.padding(3.dp))
         if (emailError) Text(
-            text = "Insira um email válido*", color = errorColor, fontSize = 15.sp
+            text = "Insira um email válido*", color = errorColor, fontSize = 14.sp
         )
+        if (emailError) Spacer(modifier = Modifier.padding(3.dp))
         Spacer(modifier = Modifier.padding(3.dp))
         TextField(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(65.dp)
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
             shape = RoundedCornerShape(10.dp),
@@ -192,7 +190,7 @@ fun LoginScreen(navController: NavController? = null) {
             visualTransformation =
             if (showPassword) VisualTransformation.None
             else PasswordVisualTransformation(),
-            label = { Text(text = "Senha", fontSize = 15.sp) },
+            placeholder = { Text(text = "Senha", fontSize = 15.sp) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -227,9 +225,9 @@ fun LoginScreen(navController: NavController? = null) {
         )
         if (passwordError) Spacer(modifier = Modifier.padding(3.dp))
         if (passwordError) Text(
-            text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 15.sp
+            text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 14.sp
         )
-        Spacer(modifier = Modifier.padding(4.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
         TextButton(modifier = Modifier.align(Alignment.End), enabled = !isLoading, onClick = {
             navController?.navigate("password")
         }) {
@@ -239,7 +237,7 @@ fun LoginScreen(navController: NavController? = null) {
                 fontSize = 15.sp
             )
         }
-        Spacer(modifier = Modifier.padding(4.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
         Button(modifier = if (isLoading) Modifier
             .width(200.dp)
             .height(55.dp)

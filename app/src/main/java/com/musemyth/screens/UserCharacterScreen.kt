@@ -30,7 +30,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,7 +48,6 @@ import com.musemyth.components.Header
 import com.musemyth.model.UserChar
 import com.musemyth.services.ContentServices
 import com.musemyth.services.fbError
-import com.musemyth.services.fetchStudentCharacters
 import com.musemyth.services.isLoadingCharacters
 import com.musemyth.services.showModal
 import com.musemyth.services.studentId
