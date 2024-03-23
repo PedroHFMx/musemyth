@@ -106,7 +106,6 @@ class UserServices {
             }
             .addOnFailureListener { exception ->
                 showModal = true
-                println("Deu erro: " + exception.message)
                 fbError = exception.message!!
             }
     }
