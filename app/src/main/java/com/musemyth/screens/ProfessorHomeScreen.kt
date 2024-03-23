@@ -29,7 +29,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -63,7 +62,7 @@ var isLoadingStudents by mutableStateOf(false)
 var students by mutableStateOf(emptyList<Student>())
 var studentName by mutableStateOf("")
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProfessorHomeScreen(navController: NavController) {
     val bottomSheetState = remember { mutableStateOf(false) }
@@ -109,6 +108,7 @@ fun ProfessorHomeScreen(navController: NavController) {
                         Row {
                             Button(
                                 onClick = {
+                                    bottomSheetState.value = false
                                     fetchStudentStorylines(studentId)
                                     navController.navigate("userStory")
                                 },
@@ -128,6 +128,7 @@ fun ProfessorHomeScreen(navController: NavController) {
                             Spacer(modifier = Modifier.padding(4.dp))
                             Button(
                                 onClick = {
+                                    bottomSheetState.value = false
                                     fetchStudentCharacters(studentId)
                                     navController.navigate("userChar")
                                 },

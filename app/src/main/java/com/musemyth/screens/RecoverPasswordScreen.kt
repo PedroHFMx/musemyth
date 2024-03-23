@@ -22,7 +22,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -104,17 +103,17 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
             TextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(60.dp)
+                    .height(70.dp)
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
                 enabled = !isLoading,
                 shape = RoundedCornerShape(10.dp),
                 value = email,
                 onValueChange = { handleErrors(it.trim()); email = it },
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontFamily = Poppins
                 ),
-                label = { Text(text = "Email", fontSize = 14.sp) },
+                placeholder = { Text(text = "Email", fontSize = 16.sp) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Email, contentDescription = "email"
@@ -162,7 +161,7 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
                     userServices.recoverPassword(email.trim(), navController!!)
                 }
                 }) {
-                if (!isLoading) Text(text = "Enviar Recuperação", fontSize = 14.sp) else {
+                if (!isLoading) Text(text = "Enviar Recuperação", fontSize = 16.sp) else {
                     CircularProgressIndicator(color = Color.White)
                 }
             }

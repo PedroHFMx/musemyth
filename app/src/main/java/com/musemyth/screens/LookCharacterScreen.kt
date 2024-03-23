@@ -1,5 +1,6 @@
 @file:OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class,
     ExperimentalMaterial3Api::class
 )
 
@@ -7,10 +8,6 @@ package com.musemyth.screens
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Rect
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,10 +44,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.musemyth.R
@@ -58,13 +53,12 @@ import com.musemyth.model.UserChar
 import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.primary
-import java.io.File
-import java.io.FileOutputStream
 
 var charIndex by mutableIntStateOf(0)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LookCharacterScreen(navController: NavController? = null, charId: String?) {
+fun LookCharacterScreen(navController: NavController? = null) {
     val context = LocalContext.current
     val fakeIndex = charIndex + 1
     val isEven = charIndex % 2 == 0
@@ -72,7 +66,6 @@ fun LookCharacterScreen(navController: NavController? = null, charId: String?) {
     lateinit var charH: Map<Any, Any>
     val generatedChar: MutableMap<Any, Any> = mutableMapOf()
     systemUiController.setSystemBarsColor(if (isEven) primary else Color(0xFF2C2983))
-
 
     fun charPathHandle(): List<UserChar> {
         return if (user.accountType == "aluno") {
@@ -87,38 +80,22 @@ fun LookCharacterScreen(navController: NavController? = null, charId: String?) {
         generatedChar.putAll(charH)
     }
 
-    fun captureScreen(context: Context): Bitmap {
-        val density = context.resources.displayMetrics.density
-        val view = (context as ComponentActivity).window.decorView
-        val screenshot = Bitmap.createBitmap(
-            (view.width * density).toInt(),
-            (view.height * density).toInt(),
-            Bitmap.Config.ARGB_8888
-        )
-        val canvas = Canvas(screenshot)
-        val rect = Rect()
-        view.getWindowVisibleDisplayFrame(rect)
-        canvas.scale(density, density)
-        view.draw(canvas)
-        return screenshot
+    val generatedString = StringBuilder()
+    generatedChar.entries.forEachIndexed { index, entry ->
+        generatedString.append("${entry.key}: ${entry.value}")
+        if (index < generatedChar.size - 1) {
+            generatedString.append("\n\n")
+        }
     }
 
-    fun shareBitmap(context: Context, text: String) {
-        val file = File(context.cacheDir, "screenshot.png")
-        val fileOutputStream = FileOutputStream(file)
-        fileOutputStream.flush()
-        fileOutputStream.close()
-
-        val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-
+    fun shareCharacter(context: Context, text: String) {
         context.startActivity(
             Intent.createChooser(
                 Intent().apply {
                     action = Intent.ACTION_SEND
                     putExtra(Intent.EXTRA_TEXT, text)
                     type = "text/plain"
-                },
-                "Compartilhar Personagem"
+                }, "Compartilhar Personagem"
             )
         )
     }
@@ -144,34 +121,31 @@ fun LookCharacterScreen(navController: NavController? = null, charId: String?) {
                     tint = Color.White
                 )
             }
-            if (user.accountType == "professor")
+            if (user.accountType == "professor") Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(16.dp), Alignment.BottomCenter
+            ) {
                 Box(
                     Modifier
-                        .fillMaxSize()
-                        .padding(16.dp), Alignment.BottomCenter
+                        .clip(CircleShape)
+                        .background(if (isEven) primary else Color(0xFF2C2983)), Alignment.Center
                 ) {
-                    Box(
-                        Modifier
-                            .clip(CircleShape)
-                            .background(if (isEven) primary else Color(0xFF2C2983)),
-                        Alignment.Center
-                    ) {
-                        Text(
-                            text = "Gerado por: $studentName",
-                            modifier = Modifier.padding(20.dp, 12.dp),
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
-                    }
+                    Text(
+                        text = "Gerado por: $studentName",
+                        modifier = Modifier.padding(20.dp, 12.dp),
+                        color = Color.White,
+                        fontSize = 16.sp
+                    )
                 }
+            }
             Box(
                 Modifier
                     .fillMaxSize()
                     .padding(16.dp), Alignment.TopEnd
             ) {
                 Row(
-                    Modifier,
-                    Arrangement.spacedBy(if (user.accountType == "aluno") 0.dp else 10.dp)
+                    Modifier, Arrangement.spacedBy(if (user.accountType == "aluno") 0.dp else 10.dp)
                 ) {
                     Box(
                         Modifier
@@ -188,29 +162,23 @@ fun LookCharacterScreen(navController: NavController? = null, charId: String?) {
                             color = Color.White
                         )
                     }
-                    if (user.accountType == "professor")
-                        Box(
-                            Modifier
-                                .clip(CircleShape)
-                                .size(50.dp)
-                                .clickable {
-                                    shareBitmap(
-                                        context, "Personagem de $studentName: " +
-                                        generatedChar
-                                            .toString()
-                                            .replace("{", "")
-                                            .replace("}", "")
-                                            .replace("=", ": ")
-                                    )
-                                }
-                                .background(if (isEven) primary else Color(0xFF2C2983)),
-                            Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Rounded.Share, contentDescription = "share this storyline",
-                                tint = Color.White
-                            )
-                        }
+                    if (user.accountType == "professor") Box(
+                        Modifier
+                            .clip(CircleShape)
+                            .size(50.dp)
+                            .clickable {
+                                shareCharacter(
+                                    context, "Personagem de - $studentName:\n\n$generatedString"
+                                )
+                            }
+                            .background(if (isEven) primary else Color(0xFF2C2983)),
+                        Alignment.Center) {
+                        Icon(
+                            Icons.Rounded.Share,
+                            contentDescription = "share this storyline",
+                            tint = Color.White
+                        )
+                    }
                 }
             }
         }
@@ -244,8 +212,7 @@ fun LookCharacterScreen(navController: NavController? = null, charId: String?) {
                         Modifier.fillMaxSize()
                     ) {
                         Text(
-                            text = storyline.key,
-                            color = if (isEven) primary else Color(0xFF2C2983)
+                            text = storyline.key, color = if (isEven) primary else Color(0xFF2C2983)
                         )
                         if (storyline.value != "") Text(text = "${storyline.value}")
                         else Divider(Modifier.padding(top = 16.dp))

@@ -27,8 +27,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -46,7 +44,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -127,11 +124,11 @@ fun LoginScreen(navController: NavController? = null) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(70.dp)
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
             textStyle = TextStyle(
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontFamily = Poppins
             ),
             shape = RoundedCornerShape(10.dp),
@@ -144,7 +141,7 @@ fun LoginScreen(navController: NavController? = null) {
                     focusRequester.requestFocus()
                 }
             ),
-            label = { Text(text = "Email", fontSize = 15.sp) },
+            placeholder = { Text(text = "Email", fontSize = 16.sp) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Rounded.Email, contentDescription = "email"
@@ -174,17 +171,18 @@ fun LoginScreen(navController: NavController? = null) {
         if (emailError) Text(
             text = "Insira um email válido*", color = errorColor, fontSize = 15.sp
         )
+        if (emailError) Spacer(modifier = Modifier.padding(3.dp))
         Spacer(modifier = Modifier.padding(3.dp))
         TextField(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(70.dp)
                 .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
             enabled = !isLoading,
             shape = RoundedCornerShape(10.dp),
             textStyle = TextStyle(
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontFamily = Poppins
             ),
             value = password,
@@ -192,7 +190,7 @@ fun LoginScreen(navController: NavController? = null) {
             visualTransformation =
             if (showPassword) VisualTransformation.None
             else PasswordVisualTransformation(),
-            label = { Text(text = "Senha", fontSize = 15.sp) },
+            placeholder = { Text(text = "Senha", fontSize = 16.sp) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             keyboardActions = KeyboardActions(
                 onDone = {
@@ -229,7 +227,7 @@ fun LoginScreen(navController: NavController? = null) {
         if (passwordError) Text(
             text = "Mínimo de 6 caracteres*", color = errorColor, fontSize = 15.sp
         )
-        Spacer(modifier = Modifier.padding(4.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
         TextButton(modifier = Modifier.align(Alignment.End), enabled = !isLoading, onClick = {
             navController?.navigate("password")
         }) {
@@ -239,7 +237,7 @@ fun LoginScreen(navController: NavController? = null) {
                 fontSize = 15.sp
             )
         }
-        Spacer(modifier = Modifier.padding(4.dp))
+        Spacer(modifier = Modifier.padding(10.dp))
         Button(modifier = if (isLoading) Modifier
             .width(200.dp)
             .height(55.dp)
@@ -253,7 +251,7 @@ fun LoginScreen(navController: NavController? = null) {
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(disabledContainerColor = Color.Black),
             onClick = { handleErrors(email, password); handleLogin() }) {
-            if (!isLoading) Text(text = "Entrar", fontSize = 15.sp) else {
+            if (!isLoading) Text(text = "Entrar", fontSize = 16.sp) else {
                 CircularProgressIndicator(color = Color.White)
             }
         }

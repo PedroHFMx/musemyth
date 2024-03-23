@@ -6,6 +6,6 @@
 
         <item name="android:windowSplashScreenIconBackgroundColor">@color/primary</item>
 
-        <item name="android:windowSplashScreenBrandingImage">@drawable/blogo</item>
+<!--        <item name="android:windowSplashScreenBrandingImage">@drawable/blogo</item>-->
     </style>
 </resources>
