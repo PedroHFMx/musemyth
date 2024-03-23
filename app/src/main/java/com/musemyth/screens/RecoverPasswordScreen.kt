@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -37,6 +39,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -105,13 +109,20 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
                     .fillMaxWidth()
                     .height(65.dp)
                     .shadow(2.dp, shape = RoundedCornerShape(10.dp)),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email, imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    handleErrors(email); if (email.matches(regexEmail)) {
+                    userServices.recoverPassword(email.trim(), navController!!)
+                }
+                }),
                 enabled = !isLoading,
                 shape = RoundedCornerShape(10.dp),
                 value = email,
                 onValueChange = { handleErrors(it.trim()); email = it },
                 textStyle = TextStyle(
-                    fontSize = 15.sp,
-                    fontFamily = Poppins
+                    fontSize = 15.sp, fontFamily = Poppins
                 ),
                 placeholder = { Text(text = "Email", fontSize = 15.sp) },
                 leadingIcon = {
@@ -123,8 +134,7 @@ fun RecoverPasswordScreen(navController: NavController? = null) {
                     if (email.isNotEmpty()) {
                         IconButton(onClick = { email = "" }) {
                             Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = "clear text"
+                                imageVector = Icons.Rounded.Close, contentDescription = "clear text"
                             )
                         }
 
