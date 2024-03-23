@@ -212,7 +212,7 @@ fun LookStorylineScreen(navController: NavController? = null) {
                         Modifier.fillMaxSize()
                     ) {
                         Text(
-                            text = storyline.key,
+                            text = "${storyline.key}:",
                             color = if (isEven) secondary else Color(0xFFC05AAA),
                         )
                         if (storyline.value != "") Text(text = "${storyline.value}")

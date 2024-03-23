@@ -55,6 +55,7 @@ import com.musemyth.components.ShowModal
 import com.musemyth.services.UserServices
 import com.musemyth.services.isLoadingUser
 import com.musemyth.services.showModal
+import com.musemyth.services.storylineTables
 import com.musemyth.services.user
 import com.musemyth.ui.theme.Poppins
 import com.musemyth.ui.theme.errorColor
@@ -193,7 +194,14 @@ fun HomeScreen(navController: NavController? = null) {
                                                 tint = secondary,
                                             )
                                             Text(
+                                                modifier = Modifier.weight(1f),
                                                 text = "Storylines Salvos",
+                                                fontFamily = Poppins,
+                                                fontSize = 15.sp,
+                                                fontWeight = FontWeight.Normal
+                                            )
+                                            Text(
+                                                text = "${story.size.toString().padStart(2, '0')}/10",
                                                 fontFamily = Poppins,
                                                 fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal
@@ -229,7 +237,14 @@ fun HomeScreen(navController: NavController? = null) {
                                                 tint = primary,
                                             )
                                             Text(
+                                                modifier = Modifier.weight(1f),
                                                 text = "Personagens Salvos",
+                                                fontFamily = Poppins,
+                                                fontSize = 15.sp,
+                                                fontWeight = FontWeight.Normal
+                                            )
+                                            Text(
+                                                text = "${char.size.toString().padStart(2, '0')}/10",
                                                 fontFamily = Poppins,
                                                 fontSize = 15.sp,
                                                 fontWeight = FontWeight.Normal

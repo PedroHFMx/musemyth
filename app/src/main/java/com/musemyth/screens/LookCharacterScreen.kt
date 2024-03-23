@@ -191,7 +191,7 @@ fun LookCharacterScreen(navController: NavController? = null) {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(30.dp),
         ) {
-            charPathHandle()[charIndex].generatedChar?.forEach { storyline ->
+            charPathHandle()[charIndex].generatedChar?.forEach { character ->
                 Row(
                     Modifier.fillMaxSize(), Arrangement.spacedBy(16.dp), Alignment.CenterVertically
                 ) {
@@ -203,8 +203,8 @@ fun LookCharacterScreen(navController: NavController? = null) {
                         Alignment.Center
                     ) {
                         Text(
-                            storyline.key[0] + storyline.key[1].toString().trim().padEnd(
-                                1, storyline.key[2]
+                            character.key[0] + character.key[1].toString().trim().padEnd(
+                                1, character.key[2]
                             ), Modifier.padding(16.dp), color = Color.White, fontSize = 15.sp
                         )
                     }
@@ -212,9 +212,9 @@ fun LookCharacterScreen(navController: NavController? = null) {
                         Modifier.fillMaxSize()
                     ) {
                         Text(
-                            text = storyline.key, color = if (isEven) primary else Color(0xFF2C2983)
+                            text = "${character.key}:", color = if (isEven) primary else Color(0xFF2C2983)
                         )
-                        if (storyline.value != "") Text(text = "${storyline.value}")
+                        if (character.value != "") Text(text = "${character.value}")
                         else Divider(Modifier.padding(top = 16.dp))
                     }
                 }

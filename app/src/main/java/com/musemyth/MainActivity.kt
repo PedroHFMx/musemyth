@@ -61,22 +61,22 @@ class MainActivity : ComponentActivity() {
                         startDestination = "loading",
                         modifier = Modifier.padding(innerPadding),
                         enterTransition = {
-                            slideInHorizontally(animationSpec = tween(durationMillis = 300)) { fullWidth ->
+                            slideInHorizontally(animationSpec = tween(durationMillis = 200)) { fullWidth ->
                                 fullWidth / 1
                             }
                         },
                         exitTransition = {
-                            slideOutHorizontally(animationSpec = tween(durationMillis = 300)) { fullWidth ->
+                            slideOutHorizontally(animationSpec = tween(durationMillis = 200)) { fullWidth ->
                                 -fullWidth / 1
                             }
                         },
                         popEnterTransition = {
-                            slideInHorizontally(animationSpec = tween(durationMillis = 300)) { fullWidth ->
+                            slideInHorizontally(animationSpec = tween(durationMillis = 200)) { fullWidth ->
                                 -fullWidth / 1
                             }
                         },
                         popExitTransition = {
-                            slideOutHorizontally(animationSpec = tween(durationMillis = 300)) { fullWidth ->
+                            slideOutHorizontally(animationSpec = tween(durationMillis = 200)) { fullWidth ->
                                 fullWidth / 1
                             }
                         },
