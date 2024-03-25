@@ -1,4 +1,6 @@
 *.iml
+*.aab
+*.apk
 .gradle
 /app/release
 /app/build
