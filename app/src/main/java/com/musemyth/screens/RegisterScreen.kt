@@ -86,7 +86,7 @@ fun RegisterScreen(navController: NavController? = null) {
 
     val userServices = UserServices()
 
-    val regexName = Regex("\\b[a-zA-Z]{3,}\\s[a-zA-Z]{3,}\\b")
+    val regexName = Regex("\\b[a-zA-ZÀ-ÖØ-öø-ÿ]{3,}\\s[a-zA-ZÀ-ÖØ-öø-ÿ]{3,}\\b")
     val regexEmail = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+\$")
 
     val nameParts = name.split(" ")
